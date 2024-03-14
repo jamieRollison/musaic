@@ -42,7 +42,7 @@ const Login = () => {
     }
     getToken();
 
-  }, [params])
+  }, [params, redirect])
   return (
     <>
     {!errorMessage ?
