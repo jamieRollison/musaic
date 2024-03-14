@@ -4,9 +4,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
-import StarterPage from './routes/initreact/starterpage'
 import Root from './routes/root'
 import './index.css'
+import Login from './routes/Login'
 
 const router = createBrowserRouter([
   {
@@ -15,8 +15,8 @@ const router = createBrowserRouter([
     element: <Root />
   },
   {
-    path: "initreact",
-    element: <StarterPage />
+    path: "login",
+    element: <Login />
   }
 ])
 
