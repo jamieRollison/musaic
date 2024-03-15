@@ -6,7 +6,11 @@ function Root() {
     return (
       <>
         <img src={musaicLogo} style={{height: 165}}/>
-        <p className='font-secondary'>Your story through your tunes.</p>
+        <p className='font-secondary'>Your 
+          <span style={{fontWeight: 550, color: '#2D81FF'}}> story </span>
+          through your 
+          <span style={{fontWeight: 550, color: '#FF3D77'}}> tunes</span>.
+        </p>
         <div className='green-button'>
           <img src={spotifyLogo}/>
           <p className='font-primary'>Sign in to Start Exploring</p>
