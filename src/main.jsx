@@ -6,17 +6,21 @@ import {
 } from 'react-router-dom'
 import StarterPage from './routes/initreact/starterpage'
 import Root from './routes/root'
+import TempLoading from './routes/temp/temp-loading'
 import './index.css'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <div>Hello world!</div>
     element: <Root />
   },
   {
     path: "initreact",
     element: <StarterPage />
+  },
+  {
+    path: "loading",
+    element: <TempLoading />
   }
 ])
 
