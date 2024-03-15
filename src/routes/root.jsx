@@ -12,7 +12,7 @@ function Root() {
           through your 
           <span style={{fontWeight: 550, color: '#FF3D77'}}> tunes</span>.
         </p>
-        <Link to={'loading'}>
+        <Link to={'/loading'}>
           <div className='green-button'>
             <img src={spotifyLogo}/>
             <p className='font-primary'>Sign in to Start Exploring</p>

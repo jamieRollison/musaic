@@ -7,6 +7,7 @@ import {
 import StarterPage from './routes/initreact/starterpage'
 import Root from './routes/root'
 import TempLoading from './routes/temp/temp-loading'
+import VisualizationPage from './routes/visualization/visualization-page'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "loading",
     element: <TempLoading />
+  },
+  {
+    path: "visualization",
+    element: <VisualizationPage />
   }
 ])
 
