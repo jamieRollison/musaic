@@ -85,7 +85,7 @@ body {
   z-index: 1000;
 }
 
-nav {
+.navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -95,11 +95,12 @@ nav {
 
 }
 
-.nav ul {
+.navbar ul {
   display: flex;
 }
 
-.nav ul li {
+.navbar ul li {
+  list-style: none;
   padding: 10px;
   margin: 0 10px;
 }

@@ -1,12 +1,22 @@
+import { Link } from "react-router-dom"
+
 function Navbar() {
   return (
     <>
       <header>
         <div className='nav-container'>
-          <nav>
+          <nav className='navbar'>
             <img src='/musaic-logo.svg' height={50}/>
             <ul>
               <li className='font-username'>BLC5</li>
+              <li>
+                {/* TODO: Sign out! */}
+                <Link to={'#'}>
+                  <div className="green-button">
+                    <p className="font-primary">Sign Out</p>
+                  </div>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
