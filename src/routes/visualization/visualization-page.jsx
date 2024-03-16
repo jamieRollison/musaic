@@ -4,7 +4,10 @@ function VisualizationPage() {
   return (
     <>
       <Navbar />
-      <p className='font-secondary'>Hi from body</p>
+      <div className='vis-grid'>
+        <p className='font-primary item-year'>2023</p>
+        <p className='font-primary item-month'>Click on a month!</p>
+      </div>
     </>
   )
 }

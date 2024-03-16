@@ -6,7 +6,7 @@ function Navbar() {
       <header>
         <div className='nav-container'>
           <nav className='navbar'>
-            <img src='/musaic-logo.svg' height={50}/>
+            <img src='/musaic-logo.svg' style={{height: '2em'}}/>
             <ul>
               <li className='font-username'>BLC5</li>
               <li>

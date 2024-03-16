@@ -24,6 +24,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: white;
+  font-size: min(max(12px, 5vh), 32px);
 }
 
 .div-center {
@@ -46,8 +47,8 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-style: normal;
   font-weight: bold;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 0.65em;
+  line-height: 2.5em;
   letter-spacing: 0.08em;
   color: #000000;
 }
@@ -56,8 +57,8 @@ body {
   font-family: 'Baskerville';
   font-style: normal;
   font-weight: 400;
-  font-size: 48px;
-  line-height: 60px;
+  font-size: 1.2em;
+  line-height: 2em;
   color: #000000;
 }
 
@@ -65,11 +66,12 @@ body {
   display: inline-flex;
   gap: 20px;
   width: fit-content;
+  /* height: min-content; */
   align-items: center;
-  padding: 5px 20px;
+  padding: 0.15em 0.50em;
   background-color: #1ED760;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  border-radius: 30px;
+  filter: drop-shadow(0px 0.25em 0.25em rgba(0, 0, 0, 0.25));
+  border-radius: 2em;
   transition: background-color 0.25s ease;
 }
 
@@ -89,28 +91,57 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: max-content;
   width: 80%;
   margin: auto;
-
 }
 
 .navbar ul {
   display: flex;
+  align-items: center;
 }
 
 .navbar ul li {
   list-style: none;
-  padding: 10px;
-  margin: 0 10px;
+  padding: 0.3em;
+  margin: 0 0.3em;
 }
 
 .font-username {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 40px;
+  font-size: 1em;
   line-height: 50px;
   letter-spacing: 0.06em;
   color: #000000;
+}
+
+/* Visualization area grid */
+.vis-grid {
+  display: grid;
+  grid-template-rows: max-content 60vw;
+  grid-template-columns: 2fr 3fr;
+  grid-template-areas: 
+    'year month'
+    'dial top';
+  margin: 2vh 2vw;
+}
+
+.item-year {
+  display: flex;
+  font-size: 1em;
+  grid-area: 'year';
+  margin: auto;
+  place-items: center;
+  text-wrap: wrap;
+}
+
+.item-month {
+  display: flex;
+  font-size: 0.85em;
+  grid-area: 'month';
+  margin: auto;
+  place-items: center;
+  text-wrap: wrap;
 }
