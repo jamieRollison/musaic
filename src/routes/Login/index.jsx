@@ -14,7 +14,8 @@ async function fetchRecentlyPlayedTracks(token) {
         'Authorization': 'Bearer ' + token
       },
       params: {
-        limit: 50
+        limit: 50,
+        after: Math.floor(oneYearAgo / 1000)
       }
     });
 
@@ -57,7 +58,7 @@ async function fetchRecentlyPlayedTracks(token) {
         valence: audioFeature.valence,              // Musical positiveness conveyed by a track 0 to 1
         mode: audioFeature.mode,                    // Minor: 0 -> Major: 1
         danceability: audioFeature.danceability,    // how suitable a track is for dancing 
-        energy: audioFeature.energy                 // Perceptual measure of intensity and activit
+        energy: audioFeature.energy                 // Perceptual measure of intensity and activity
       };
     }));
     return tracksWithDetails;
