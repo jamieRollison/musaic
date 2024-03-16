@@ -1,6 +1,7 @@
 *,
 *::before,
 *::after {
+  margin: 0;
   box-sizing: border-box;
 }
 
@@ -25,12 +26,21 @@ body {
   background-color: white;
 }
 
-/* Needed for stacking elements vertically */
-/* .div-vert {
+.div-center {
   display: flex;
+  place-items: center;
+}
+
+/* Needed for stacking elements vertically */
+.div-vert {
+  display: flex;
+  width: 100%;
   flex-direction: column;
-  align-items: center;
-} */
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 50px;
+  height: 100vh;
+}
 
 .font-primary {
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -52,13 +62,11 @@ body {
 }
 
 .green-button {
-  /* display: flex;
-  flex-direction: row;
-  gap: 20px; */
   display: inline-flex;
   gap: 20px;
   width: fit-content;
-  padding: 0px 20px;
+  align-items: center;
+  padding: 5px 20px;
   background-color: #1ED760;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   border-radius: 30px;
@@ -67,4 +75,41 @@ body {
 
 .green-button:hover {
   background-color: #19ac4d;
+}
+
+/* Navbar stuff */
+.nav-container {
+  border-bottom: 2px solid black;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 80%;
+  margin: auto;
+
+}
+
+.nav ul {
+  display: flex;
+}
+
+.nav ul li {
+  padding: 10px;
+  margin: 0 10px;
+}
+
+.font-username {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 50px;
+  letter-spacing: 0.06em;
+  color: #000000;
 }

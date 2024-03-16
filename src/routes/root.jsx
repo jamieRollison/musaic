@@ -1,11 +1,10 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import musaicLogo from '/musaic-logo.svg'
 import spotifyLogo from '/spotify-logo.svg'
-import './root.css'
 
 function Root() {
     return (
-      <>
+      <div className='div-center div-vert'>
         <img src={musaicLogo} style={{height: 165}}/>
         <p className='font-secondary'>Your 
           <span style={{fontWeight: 550, color: '#2D81FF'}}> story </span>
@@ -18,7 +17,7 @@ function Root() {
             <p className='font-primary'>Sign in to Start Exploring</p>
           </div>
         </Link>
-      </>
+      </div>
     )
 }
 

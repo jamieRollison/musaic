@@ -1,9 +1,0 @@
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-wrap: wrap;
-  /* TODO: NO clue why changing column gap does not affect the positioning */
-  column-gap: 100px;
-}
-

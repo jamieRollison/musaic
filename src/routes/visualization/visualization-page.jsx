@@ -1,5 +1,4 @@
 import Navbar from '../../components/navbar/navbar'
-import './visualization-page.css'
 
 function VisualizationPage() {
   return (
