@@ -120,7 +120,7 @@ body {
 /* Visualization area grid */
 .vis-grid {
   display: grid;
-  grid-template-rows: max-content 75vh;
+  grid-template-rows: max-content max-content;
   grid-template-columns: 2fr 3fr;
   grid-template-areas: 
     'year month'
@@ -149,7 +149,8 @@ body {
 .item-dial {
   display: flex;
   grid-area: dial;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .item-most {
@@ -197,4 +198,22 @@ body {
   font-weight: normal;
   line-height: 0.5em;
   color: black;
+}
+
+/* The SVG visualization */
+.monthArc {
+  fill: none;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.monthText {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 0.65em;
+  line-height: 2.5em;
+  letter-spacing: 0.20em;
+  color: #000000;
+  cursor: pointer;
 }

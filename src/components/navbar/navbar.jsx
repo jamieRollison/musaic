@@ -13,7 +13,7 @@ function Navbar() {
                 {/* TODO: Sign out! */}
                 <Link to={'#'}>
                   <div className="green-button">
-                    <p className="font-primary">Sign Out</p>
+                    <h3 className="font-primary">Sign Out</h3>
                   </div>
                 </Link>
               </li>
