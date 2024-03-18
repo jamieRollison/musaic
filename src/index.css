@@ -201,11 +201,12 @@ body {
 }
 
 /* The SVG visualization */
-.baseCircle {
-  stroke: black;
-  stroke-width: 2px;
-  fill: white;
-}
+/* .baseCircle { */
+  /* stroke: black; */
+  /* stroke-width: 2px; */
+  /* fill: purple; */
+  /* background: linear-gradient(0deg, orange, purple); */
+/* } */
 
 .monthArc {
   fill: none;
@@ -217,17 +218,17 @@ body {
 .monthText {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-style: normal;
-  font-weight: bold;
+  font-weight: 1000;
   /* font-size: 0.65em;
   line-height: 2.5em;
   letter-spacing: 0.20em; */
   font-size: 20px;
   line-height: 40px;
-  letter-spacing: 5px;
+  letter-spacing: 7px;
 
   fill: white;
-  stroke: red;
-  stroke-width: 1px;
+  /* stroke: black;
+  stroke-width: 1px; */
   cursor: pointer;
   mix-blend-mode: difference;
 }

@@ -68,22 +68,44 @@ function Dial() {
     const LABEL_MONTH_CENTERLINE_LENGTH = 
       LABEL_CENTERLINE_LENGTH / monthData.length
     const LABEL_RADIUS_SIZE = LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS
+    const LABEL_PADDING = 0.035
+    const LABEL_CORNER_RADIUS = 10
 
     const pie = d3.pie().value(1)
     const arc = d3.arc()
       .innerRadius(LABEL_INNER_RADIUS)
       .outerRadius(LABEL_OUTER_RADIUS)
-      .padAngle(0.035)
+      .padAngle(LABEL_PADDING)
+      .cornerRadius(LABEL_CORNER_RADIUS)
 
     // Ordering
     svg.append('g').attr('id', 'base')
     svg.append('g').attr('id', 'blend')
 
+    /**
+     * Gradient coloring for the base circle, code from:
+     * https://stackoverflow.com/questions/39023154/how-to-make-a-color-gradient-bar-using-d3js
+     */
+    const colors = ['#c71585', '#ffff00']
+    const linearGradient = svg.append("defs").append("linearGradient")
+        .attr("id", "linear-gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%");
+    linearGradient.selectAll('stop')
+        .data(colors)
+        .enter().append('stop')
+          .style('stop-color', function(d){ return d; })
+          .attr('offset', function(d,i){
+            return 100 * (i / (colors.length - 1)) + '%';
+        })
+
     // Draw the base circle
     svg.select('#base').append('circle')
       .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
-      .attr('r', 0.5*d3.min([P_WIDTH, P_HEIGHT]))
-      .attr('class', 'baseCircle')
+      .attr('r', 2 + d3.min([P_WIDTH, P_HEIGHT])/2)
+      .style('fill', 'url(#linear-gradient)')
 
     /**
      * Base arc drawing + text code comes from:
@@ -103,8 +125,8 @@ function Dial() {
       .data(monthData)
       .enter().append("text")
         .attr("class", "monthText")
-        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.20)
-        .attr('dy', LABEL_RADIUS_SIZE*0.65)
+        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.30)
+        .attr('dy', LABEL_RADIUS_SIZE*0.60)
         .append("textPath")
         .attr("xlink:href", (d,i) => "#monthArc_"+i)
         .text(d => d)
