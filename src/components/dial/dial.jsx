@@ -51,15 +51,17 @@ function Dial() {
     const svg = d3.select(svgRef.current)
       .attr('width', 450)
       .attr('height', 450)
+
+    // CONSTANTS GALORE
     const WIDTH = svg.attr('width')
     const HEIGHT = svg.attr('height')
 
-    const PAD = {h: 10, v: 10}
+    const PAD = {h: 20, v: 20}
     const P_WIDTH = WIDTH - 2*PAD.h
     const P_HEIGHT = HEIGHT - 2*PAD.v
 
-    const LABEL_INNER_RADIUS = P_WIDTH/3
-    const LABEL_OUTER_RADIUS = P_WIDTH/2
+    const LABEL_INNER_RADIUS = d3.min([P_WIDTH, P_HEIGHT])/3
+    const LABEL_OUTER_RADIUS = d3.min([P_WIDTH, P_HEIGHT])/2
     const LABEL_MEDIAN_RADIUS = 
       LABEL_INNER_RADIUS + ((LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS)/2)
     const LABEL_CENTERLINE_LENGTH = 2 * Math.PI * LABEL_MEDIAN_RADIUS
@@ -73,29 +75,39 @@ function Dial() {
       .outerRadius(LABEL_OUTER_RADIUS)
       .padAngle(0.035)
 
+    // Ordering
+    svg.append('g').attr('id', 'base')
+    svg.append('g').attr('id', 'blend')
+
+    // Draw the base circle
+    svg.select('#base').append('circle')
+      .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
+      .attr('r', 0.5*d3.min([P_WIDTH, P_HEIGHT]))
+      .attr('class', 'baseCircle')
+
     /**
      * Base arc drawing + text code comes from:
      * https://www.visualcinnamon.com/2015/09/placing-text-on-arcs/
      */
     // Draw the arcs themselves
-    svg.selectAll('.monthArc')
+    svg.select("#blend").selectAll('.monthArc')
       .data(pie(monthData))
-      .enter().append('path')
+      .join('path')
         .attr('class', 'monthArc')
         .attr('id', (d, i) => 'monthArc_'+i) // unique id for each slice
         .attr('d', arc)
         .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
 
     //Append the month names to each slice
-    svg.selectAll(".monthText")
+    svg.select("#blend").selectAll(".monthText")
       .data(monthData)
       .enter().append("text")
-      .attr("class", "monthText")
-      .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.20)
-      .attr('dy', LABEL_RADIUS_SIZE*0.65)
-      .append("textPath")
-      .attr("xlink:href", (d,i) => "#monthArc_"+i)
-      .text(d => d)
+        .attr("class", "monthText")
+        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.20)
+        .attr('dy', LABEL_RADIUS_SIZE*0.65)
+        .append("textPath")
+        .attr("xlink:href", (d,i) => "#monthArc_"+i)
+        .text(d => d)
   }, [monthData])
 
   return (
