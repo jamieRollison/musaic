@@ -201,13 +201,6 @@ body {
 }
 
 /* The SVG visualization */
-/* .baseCircle { */
-  /* stroke: black; */
-  /* stroke-width: 2px; */
-  /* fill: purple; */
-  /* background: linear-gradient(0deg, orange, purple); */
-/* } */
-
 .monthArc {
   fill: none;
   stroke: white;
@@ -231,4 +224,18 @@ body {
   stroke-width: 1px; */
   cursor: pointer;
   mix-blend-mode: difference;
+}
+
+.moodsText {
+  /* font-family: 'Baskerville', sans-serif; */
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  /* font-size: 30px; changed inside dial.jsx */
+  letter-spacing: 2px;
+
+  text-anchor: middle;
+  mix-blend-mode: multiply;
+  stroke: black; 
+  stroke-width: 1px;
 }

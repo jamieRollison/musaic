@@ -52,6 +52,15 @@ function Dial() {
       .attr('width', 450)
       .attr('height', 450)
 
+    // TODO: Query and get dict of Mood -> Color 
+    const moodMap = {
+      'Joyful': '#ffff00',
+      'Mysterious': '#c71585',
+      'Lmao': '#008000'
+    }
+    const colors = Object.values(moodMap)
+    const moods = Object.keys(moodMap)
+
     // CONSTANTS GALORE
     const WIDTH = svg.attr('width')
     const HEIGHT = svg.attr('height')
@@ -71,6 +80,12 @@ function Dial() {
     const LABEL_PADDING = 0.035
     const LABEL_CORNER_RADIUS = 10
 
+    const MOODS_LINE_PADDING = 10;
+    const MOOD_SPACER = 
+      (2*LABEL_INNER_RADIUS - 2*MOODS_LINE_PADDING)/(moods.length+1)
+    const MOODS_Y_STARTER = HEIGHT/2 - LABEL_INNER_RADIUS + MOODS_LINE_PADDING
+    const MOODS_FONT_SIZE = 30 // px
+
     const pie = d3.pie().value(1)
     const arc = d3.arc()
       .innerRadius(LABEL_INNER_RADIUS)
@@ -81,12 +96,13 @@ function Dial() {
     // Ordering
     svg.append('g').attr('id', 'base')
     svg.append('g').attr('id', 'blend')
+    svg.append('g').attr('id', 'moods')
 
     /**
      * Gradient coloring for the base circle, code from:
      * https://stackoverflow.com/questions/39023154/how-to-make-a-color-gradient-bar-using-d3js
      */
-    const colors = ['#c71585', '#ffff00']
+    // const colors = ['#c71585', '#ffff00']
     const linearGradient = svg.append("defs").append("linearGradient")
         .attr("id", "linear-gradient")
         .attr("x1", "0%")
@@ -104,7 +120,7 @@ function Dial() {
     // Draw the base circle
     svg.select('#base').append('circle')
       .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
-      .attr('r', 2 + d3.min([P_WIDTH, P_HEIGHT])/2)
+      .attr('r', 2 + Math.min(P_WIDTH, P_HEIGHT)/2)
       .style('fill', 'url(#linear-gradient)')
 
     /**
@@ -120,7 +136,7 @@ function Dial() {
         .attr('d', arc)
         .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
 
-    //Append the month names to each slice
+    // Append the month names to each slice
     svg.select("#blend").selectAll(".monthText")
       .data(monthData)
       .enter().append("text")
@@ -130,6 +146,21 @@ function Dial() {
         .append("textPath")
         .attr("xlink:href", (d,i) => "#monthArc_"+i)
         .text(d => d)
+
+    // Top Moods list for that month
+    // const moods = ['Mysterious', 'Joyful']
+    svg.select("#moods").selectAll(".moodsText")
+      .data(moods)
+      .enter().append("text")
+        .attr("class", "moodsText")
+        .attr('x', (WIDTH/2))
+        .attr('y', 
+          (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
+        .text(d => d)
+        .style('fill', d => moodMap[d])
+        .style('font-size', MOODS_FONT_SIZE)
+      
+      
   }, [monthData])
 
   return (
