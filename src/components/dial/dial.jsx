@@ -42,11 +42,6 @@ function Dial({curMonth, changeMonth}) {
     'JUL':7, 'AUG':8, 'SEP':9, 'OCT':10, 'NOV':11, 'DEC':12
   }
   const months = Object.keys(monthMap)
-  // ].reduce((acc, m) => {
-  //   acc.push({month: m, id: acc.length+1})
-  //   return acc
-  // }, [])
-
   // draw the dial
   useEffect(() => {
     const svg = d3.select(svgRef.current)
@@ -137,6 +132,10 @@ function Dial({curMonth, changeMonth}) {
         .attr('id', (d, i) => 'monthArc_'+i) // unique id for each slice
         .attr('d', arc)
         .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
+        .attr('fill', (d, i) => (i+1 === curMonth) 
+            ? 'rgba(255, 255, 255, 0.3)'
+            : 'rgba(255, 255, 255, 0.0)'
+        )
         .on('click', (event, d) => changeMonth(monthMap[d.data]))
 
     // Append the month names to each slice
@@ -166,7 +165,7 @@ function Dial({curMonth, changeMonth}) {
         .style('font-size', MOODS_FONT_SIZE)
       
       
-  }, [months])
+  }, [curMonth])
 
   return (
       <svg ref={svgRef}></svg>

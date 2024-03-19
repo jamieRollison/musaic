@@ -202,7 +202,7 @@ body {
 
 /* The SVG visualization */
 .monthArc {
-  fill: rgba(255, 255, 255, 0.0);
+  /* fill: rgba(255, 255, 255, 0.0); */
   stroke: white;
   stroke-width: 2px;
   mix-blend-mode: difference;
