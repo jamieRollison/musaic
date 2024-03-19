@@ -1,18 +1,29 @@
 import Navbar from '../../components/navbar/navbar'
 import Dial from '../../components/dial/dial'
+import React from 'react'
 
 function VisualizationPage() {
+  const monthValues = [
+    "Click on a month!",
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December", 
+  ]
+  const [month, setMonth] = React.useState(0)
+  const handleMonth = React.useCallback(
+    (nextMonth) => {
+      if (! (1 <= nextMonth && nextMonth <= 12)) { return }
+      setMonth(nextMonth)
+    }
+  , [])
+
   return (
-    // TODO: make a variable of currently selected month
     <>
       <Navbar />
       <div className='vis-grid'>
         <h3 className='font-primary item-year'>2023</h3>
-        {/* TODO: Update selected month text */}
-        <h3 className='font-primary item-month'>Click on a month!</h3>
+        <h3 className='font-primary item-month'>{monthValues[month]}</h3>
         <div className='item-dial'>
-          {/* TODO: Make Dial update the month (pass in as ref argument?) */}
-          <Dial />
+          <Dial curMonth={month} changeMonth={handleMonth}/>
         </div>
         <div className='item-most'>
           {/* TODO: Update top artists/songs based on month selected */}

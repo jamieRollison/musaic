@@ -35,12 +35,13 @@ import * as d3 from "d3"
 //   }
 // }
 
-function Dial() {
+function Dial({curMonth, changeMonth}) {
   const svgRef = useRef()
-  const monthData = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
-  ]
+  const monthMap = { 
+    'JAN':1, 'FEB':2, 'MAR':3, 'APR':4, 'MAY':5, 'JUN':6,
+    'JUL':7, 'AUG':8, 'SEP':9, 'OCT':10, 'NOV':11, 'DEC':12
+  }
+  const months = Object.keys(monthMap)
   // ].reduce((acc, m) => {
   //   acc.push({month: m, id: acc.length+1})
   //   return acc
@@ -75,7 +76,7 @@ function Dial() {
       LABEL_INNER_RADIUS + ((LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS)/2)
     const LABEL_CENTERLINE_LENGTH = 2 * Math.PI * LABEL_MEDIAN_RADIUS
     const LABEL_MONTH_CENTERLINE_LENGTH = 
-      LABEL_CENTERLINE_LENGTH / monthData.length
+      LABEL_CENTERLINE_LENGTH / months.length
     const LABEL_RADIUS_SIZE = LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS
     const LABEL_PADDING = 0.035
     const LABEL_CORNER_RADIUS = 10
@@ -129,7 +130,7 @@ function Dial() {
      */
     // Draw the arcs themselves
     svg.select("#blend").selectAll('.monthArc')
-      .data(pie(monthData))
+      .data(pie(months))
       .join('path')
         .attr('class', 'monthArc')
         .attr('id', (d, i) => 'monthArc_'+i) // unique id for each slice
@@ -138,7 +139,7 @@ function Dial() {
 
     // Append the month names to each slice
     svg.select("#blend").selectAll(".monthText")
-      .data(monthData)
+      .data(months)
       .enter().append("text")
         .attr("class", "monthText")
         .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.30)
@@ -146,6 +147,7 @@ function Dial() {
         .append("textPath")
         .attr("xlink:href", (d,i) => "#monthArc_"+i)
         .text(d => d)
+        .on('click', (event, d) => changeMonth(monthMap[d]))
 
     // Top Moods list for that month
     // const moods = ['Mysterious', 'Joyful']
@@ -161,7 +163,7 @@ function Dial() {
         .style('font-size', MOODS_FONT_SIZE)
       
       
-  }, [monthData])
+  }, [months])
 
   return (
       <svg ref={svgRef}></svg>
