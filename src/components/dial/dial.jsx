@@ -78,8 +78,9 @@ function Dial({curMonth, changeMonth}) {
     const LABEL_MONTH_CENTERLINE_LENGTH = 
       LABEL_CENTERLINE_LENGTH / months.length
     const LABEL_RADIUS_SIZE = LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS
-    const LABEL_PADDING = 0.035
-    const LABEL_CORNER_RADIUS = 10
+    const LABEL_PADDING = 0.0085
+    const LABEL_CORNER_RADIUS = 0
+    const LABEL_FONT_SIZE = 20
 
     const MOODS_LINE_PADDING = 10;
     const MOOD_SPACER = 
@@ -136,17 +137,19 @@ function Dial({curMonth, changeMonth}) {
         .attr('id', (d, i) => 'monthArc_'+i) // unique id for each slice
         .attr('d', arc)
         .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
+        .on('click', (event, d) => changeMonth(monthMap[d.data]))
 
     // Append the month names to each slice
     svg.select("#blend").selectAll(".monthText")
       .data(months)
       .enter().append("text")
         .attr("class", "monthText")
-        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.30)
-        .attr('dy', LABEL_RADIUS_SIZE*0.60)
+        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH/1.75)
+        .attr('dy', LABEL_RADIUS_SIZE/2 + LABEL_FONT_SIZE/3)
         .append("textPath")
         .attr("xlink:href", (d,i) => "#monthArc_"+i)
         .text(d => d)
+        .style('font-size', LABEL_FONT_SIZE)
         .on('click', (event, d) => changeMonth(monthMap[d]))
 
     // Top Moods list for that month

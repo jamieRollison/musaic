@@ -130,7 +130,7 @@ body {
 
 .item-year {
   display: flex;
-  font-size: 1em;
+  font-size: 1.3em;
   grid-area: year;
   margin: auto;
   place-items: center;
@@ -139,7 +139,7 @@ body {
 
 .item-month {
   display: flex;
-  font-size: 0.85em;
+  font-size: 1.1em;
   grid-area: month;
   margin: auto;
   place-items: center;
@@ -158,14 +158,14 @@ body {
   grid-area: most;
   flex-direction: column;
   justify-content: baseline;
-  gap: 1.5em;
-  padding: 1em;
+  gap: 1em;
+  padding: 0.2em;
   height: auto;
 }
 
 .item-most h3 {
   border-bottom: 2px solid black;
-  grid-area: auto;
+  grid-area: most;
   width: max-content;
 
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -202,32 +202,28 @@ body {
 
 /* The SVG visualization */
 .monthArc {
-  fill: none;
+  fill: rgba(255, 255, 255, 0.0);
   stroke: white;
   stroke-width: 2px;
   mix-blend-mode: difference;
+  cursor: pointer;
 }
 
 .monthText {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-style: normal;
   font-weight: 1000;
-  /* font-size: 0.65em;
-  line-height: 2.5em;
-  letter-spacing: 0.20em; */
-  font-size: 20px;
+  /* font-size: 20px; changed inside dial.jsx */
   line-height: 40px;
   letter-spacing: 7px;
 
+  text-anchor: middle;
   fill: white;
-  /* stroke: black;
-  stroke-width: 1px; */
   cursor: pointer;
   mix-blend-mode: difference;
 }
 
 .moodsText {
-  /* font-family: 'Baskerville', sans-serif; */
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-style: normal;
   font-weight: 800;
