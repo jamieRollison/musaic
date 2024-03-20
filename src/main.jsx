@@ -7,6 +7,7 @@ import {
 import Root from './routes/root'
 import './index.css'
 import Login from './routes/Login'
+import Visualization from './routes/Visualization'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />
+  },
+  {
+    path: "visualization",
+    element: <Visualization />
   }
 ])
 
