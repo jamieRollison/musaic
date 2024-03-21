@@ -5,19 +5,28 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import Root from './routes/root'
+import TempLoading from './routes/temp/temp-loading'
+import Visualization from './routes/Visualization'
 import './index.css'
 import Login from './routes/Login'
-import Visualization from './routes/Visualization'
+// import Visualization from './routes/Visualization'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <div>Hello world!</div>
     element: <Root />
   },
   {
     path: "login",
     element: <Login />
+  },
+  // {
+  //   path: "visualization",
+  //   element: <Visualization />
+  // },
+  {
+    path: "loading",
+    element: <TempLoading />
   },
   {
     path: "visualization",

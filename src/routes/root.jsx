@@ -2,6 +2,8 @@ import { useSearchParams } from 'react-router-dom'
 import musaicLogo from '/musaic-logo.svg'
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'
+import spotifyLogo from '/spotify-logo.svg'
 
 function Root() {
     function generateRandomString(length) {
@@ -19,7 +21,7 @@ function Root() {
 
     const spotify_params = useSearchParams({
       response_type: 'code',
-      client_id: import.meta.env.VITE_CLIENT_ID,
+      client_id: import.meta.env.VITE_OTHER_ID,
       scope: SCOPES,
       redirect_uri: REDIRECT_URI,
       state: state
@@ -55,14 +57,23 @@ function Root() {
         fetchRecentlyPlayedTracks(token)
     })
 
-    const spoitfy_url = 'https://accounts.spotify.com/authorize?' + spotify_params.toString().split(',')[0]
-    console.log(spoitfy_url)
+    const spotify_url = 'https://accounts.spotify.com/authorize?' + spotify_params.toString().split(',')[0]
 
     return (
-      <>
-        <img src={musaicLogo}/>
-        <a href={spoitfy_url}>login</a>
-      </>
+      <div className='div-center div-vert'>
+        <img src={musaicLogo} style={{height: 165}}/>
+        <p className='font-secondary'>Your 
+          <span style={{fontWeight: 550, color: '#2D81FF'}}> story </span>
+          through your 
+          <span style={{fontWeight: 550, color: '#FF3D77'}}> tunes</span>.
+        </p>
+        <Link to={spotify_url}>
+          <div className='green-button'>
+            <img src={spotifyLogo}/>
+            <p className='font-primary'>Sign in to Start Exploring</p>
+          </div>
+        </Link>
+      </div>
     )
 }
 
