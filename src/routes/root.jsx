@@ -15,7 +15,7 @@ function Root() {
         return randomString;
     }
 
-    const REDIRECT_URI = 'http://localhost:5173/login';
+    const REDIRECT_URI = `${import.meta.env.BASE_URL}/login`;
     const SCOPES = 'user-read-private user-read-email user-read-recently-played';
     const state = generateRandomString(16)
 
