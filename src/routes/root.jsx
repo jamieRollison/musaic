@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import spotifyLogo from '/spotify-logo.svg'
 
 function Root() {
+    const base = import.meta.env.PROD ? 'https://musaic-psi.vercel.app' : 'http://localhost:5173'
     function generateRandomString(length) {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let randomString = '';
@@ -15,7 +16,7 @@ function Root() {
         return randomString;
     }
 
-    const REDIRECT_URI = `${import.meta.env.BASE_URL}/login`;
+    const REDIRECT_URI = `${base}/login`;
     const SCOPES = 'user-read-private user-read-email user-read-recently-played';
     const state = generateRandomString(16)
 
