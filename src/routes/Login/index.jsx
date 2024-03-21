@@ -88,7 +88,7 @@ const Login = () => {
             url: "https://accounts.spotify.com/api/token",
             data: {
               code: code,
-              redirect_uri: 'http://localhost:5173/login',
+              redirect_uri: `${import.meta.env.BASE_URL}/login`,
               grant_type: 'authorization_code',
               client_id: import.meta.env.VITE_OTHER_ID,
               client_secret: import.meta.env.VITE_OTHER_SECRET
