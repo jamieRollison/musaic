@@ -3,6 +3,7 @@ import Dial from '../../components/dial/dial'
 import {useEffect, useState, useCallback} from 'react'
 import axios from 'axios'
 import { all_songs, ids_map, averages } from "./offline"
+import { colors } from './offline'
 
 function Visualization() {
   const token = window.localStorage.getItem('token')
@@ -152,6 +153,11 @@ function Visualization() {
             <button style={{color: lens === 'valence' ? 'white' : 'black'}} onClick={() => setLens("valence")}>Valence</button>
             <button style={{color: lens === 'energy' ? 'white' : 'black'}} onClick={() => setLens("energy")}>Energy</button>
             <button style={{color: lens === 'danceability' ? 'white' : 'black'}} onClick={() => setLens("danceability")}>Danceability</button>
+          </div>
+          <div className='legend'>
+            <p>less {lens}</p>
+            <div style={{background: `linear-gradient(90deg, ${colors})`}}></div>
+            <p>more {lens}</p>
           </div>
           <Dial data={averages} changeMonth={handleMonth} lens={lens}/>
         </div>

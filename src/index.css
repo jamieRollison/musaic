@@ -289,3 +289,24 @@ body {
   width: 75%;
   height: auto;
 }
+
+.legend {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.4em;
+  line-height: 2em;
+  letter-spacing: 0.06em;
+  color: #000000;
+  display: flex;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 100px;
+  align-self: center;
+  height: 10px;
+  margin: 0.5em;
+}
