@@ -11,10 +11,12 @@ function Navbar() {
               <li className='font-username'>BLC5</li>
               <li>
                 {/* TODO: Sign out! */}
-                <Link to={'#'}>
-                  <div className="green-button">
+                <Link to={'/'}>
+                  <button className="green-button" onClick={() => {
+                    window.localStorage.removeItem('token')
+                  }}>
                     <h3 className="font-primary">Sign Out</h3>
-                  </div>
+                  </button>
                 </Link>
               </li>
             </ul>

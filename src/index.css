@@ -66,6 +66,8 @@ body {
   display: inline-flex;
   gap: 20px;
   width: fit-content;
+  font-size: 0.8em;
+  border: black;
   /* height: min-content; */
   align-items: center;
   padding: 0.15em 0.5em;
