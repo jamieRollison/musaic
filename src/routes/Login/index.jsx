@@ -72,7 +72,7 @@ const Login = () => {
   const [params, _setParams] = useSearchParams()
   const [errorMessage, setErrorMessage] = useState('')
   const redirect = useNavigate()
-  const base = import.meta.env.PROD ? 'https://musaic-psi.vercel.app' : 'http://localhost:5173'
+  // const base = import.meta.env.PROD ? 'https://musaic-psi.vercel.app' : 'http://localhost:5173'
 
   useEffect(() => {
     let ignore = false;
@@ -89,7 +89,7 @@ const Login = () => {
             url: "https://accounts.spotify.com/api/token",
             data: {
               code: code,
-              redirect_uri: `${base}/login`,
+              redirect_uri: `https://musaic-git-jamiedata-jamierollison.vercel.app/login`,
               grant_type: 'authorization_code',
               client_id: import.meta.env.VITE_OTHER_ID,
               client_secret: import.meta.env.VITE_OTHER_SECRET
