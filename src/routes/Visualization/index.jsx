@@ -2,7 +2,10 @@ import Navbar from '../../components/navbar/navbar'
 import Dial from '../../components/dial/dial'
 import {useEffect, useState, useCallback} from 'react'
 import axios from 'axios'
-import { all_songs, ids_map, averages } from "./offline"
+// import { all_songs, ids_map, averages } from "./offline"
+import * as all_songs_blob from './jamie/jamie_allsongs.json'
+import * as averages_blob from './jamie/jamie_averages.json'
+import * as ids_map_blob from './jamie/jamie_ids_map.json'
 import { colors } from './offline'
 
 function Visualization() {
@@ -16,6 +19,8 @@ function Visualization() {
   
   // get the top 3 most valent songs per month
   const stats = (month, quality, top) => {
+    const all_songs = all_songs_blob.default
+    console.log(all_songs)
     let month_songs = {}
     if (month === 0) {
       // get full year
@@ -29,7 +34,11 @@ function Visualization() {
 
 
   const playlist_id = '4EK2TDhIoZSGtoOU71zvpn'
+  const ids_map = ids_map_blob.default
+  const averages = averages_blob.default
+
   useEffect(() => {
+  
     const getData = async () => {
       let pl = []
       if (token && !loaded) {
