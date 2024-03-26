@@ -16,7 +16,7 @@ function Root() {
         return randomString;
     }
 
-    const REDIRECT_URI = `https://vercel.live/link/musaic-git-jamiedata-jamierollison.vercel.app/login`;
+    const REDIRECT_URI = `https://musaic-git-jamiedata-jamierollison.vercel.app/login`;
     const SCOPES = 'user-read-private user-read-email user-read-recently-played';
     const state = generateRandomString(16)
 
