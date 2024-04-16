@@ -4,24 +4,22 @@ from datetime import timedelta, datetime
 from sys import argv
 import pandas as pd
 
-if len(argv) < 3:
-    print("usage: python spotify_to_csv.py [input directory] [output file]")
+if len(argv) < 4:
+    print("usage: python spotify_to_csv.py [input directory] [output file] [year]")
     exit(1)
 
 directory = argv[1]
 output_file = argv[2]
+year = argv[3]
 
-current_date = datetime.today()
-one_year_ago = current_date - timedelta(days=365)
+# current_date = datetime.today()
+# one_year_ago = current_date - timedelta(days=365)
 
-print(f"Getting data between {one_year_ago} and {current_date}")
+# print(f"Getting data between {one_year_ago} and {current_date}")
 
 # Get all the JSON files in the directory
 json_files = [
-    file
-    for file in os.listdir(directory)
-    if file.endswith(".json")
-    and (str(current_date.year) in file or str(one_year_ago.year) in file)
+    file for file in os.listdir(directory) if file.endswith(".json") and (year in file)
 ]
 print("Found relevant files:", json_files)
 
@@ -39,8 +37,7 @@ for file in json_files:
             [
                 file
                 for file in file_data
-                if datetime.fromisoformat(file["ts"]).timestamp()
-                > one_year_ago.timestamp()
+                if datetime.fromisoformat(file["ts"]).year == int(year)
             ]
         )
 
