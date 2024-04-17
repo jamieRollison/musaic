@@ -54,6 +54,8 @@ data_pd = pd.DataFrame(data)[
     ]
 ]
 
+data_pd.to_json(output_file, "records")
+
 # Write the concatenated data to the output file
-with open(output_file, "w") as f:
-    data_pd.to_csv(output_file)
+# with open(output_file, "w") as f:
+#     data_pd.to_csv(output_file)
