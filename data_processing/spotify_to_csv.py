@@ -40,7 +40,6 @@ for file_name in json_files:
                 if ((file_item["skipped"] == False) and (datetime.fromisoformat(file_item["ts"]).year == year) and (file_item["spotify_track_uri"] != None))
             ]
         )
-
 print("done scanning files")
 
 data_pd = pd.DataFrame(data)[
@@ -50,70 +49,85 @@ data_pd = pd.DataFrame(data)[
         "master_metadata_album_artist_name",
         "master_metadata_album_album_name",
         "spotify_track_uri",
-        "skipped",
     ]
 ]
 
-# Load environment variables from .env file
-load_dotenv()
+# read data from data.json for information about audio features for every unique song
+file_path = "data_processing/data.json"
+song_features = pd.read_json(file_path, orient = 'split', compression = 'infer')
 
-# Access environment variables
-my_client_id = os.getenv('VITE_ID')
-my_client_secret = os.getenv('VITE_SECRET')
+# loop through data_pd and add audio features to the dataframe
+for index, row in data_pd.iterrows():
+    date = datetime.fromisoformat(row["ts"])
+    data_pd.loc[index, 'year'] = date.year
+    data_pd.loc[index, 'month'] = date.month
+    data_pd.loc[index, 'day'] = date.day
 
-client_credentials_manager = SpotifyClientCredentials(client_id=my_client_id,
-                                                      client_secret=my_client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    # get the song uri
+    spotify_uri = row["spotify_track_uri"]
 
-cleaned_df = data_pd.drop_duplicates(subset=['spotify_track_uri'])
+    # get the audio features for the song
+    filtered_df = song_features[song_features['spotify_track_uri'] == spotify_uri]
+    song_info = filtered_df.iloc[0]
 
-for index, row in cleaned_df.iterrows():
-    split = row["spotify_track_uri"].split(":")
-    spotify_uri = split[2]
-    
-    try:
-        # more info about audio features: https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
-        track_info = sp.audio_features([spotify_uri])
-        song_features = track_info[0]
+    # add the audio features to the dataframe
+    data_pd.loc[index, 'valence'] = song_info["valence"]
+    data_pd.loc[index, 'energy'] = song_info["energy"]
+    data_pd.loc[index, 'danceability'] = song_info["danceability"]
+    data_pd.loc[index, 'acousticness'] = song_info["acousticness"]
+    data_pd.loc[index, 'tempo'] = song_info["tempo"]
+    data_pd.loc[index, 'speechiness'] = song_info["speechiness"]
+    data_pd.loc[index, 'mode'] = song_info["mode"]
 
-        cleaned_df.loc[index, 'valence'] = song_features["valence"]
-        cleaned_df.loc[index, 'energy'] = song_features["energy"]
-        cleaned_df.loc[index, 'danceability'] = song_features["danceability"]
-        cleaned_df.loc[index, 'acousticness'] = song_features["acousticness"]
-        cleaned_df.loc[index, 'tempo'] = song_features["tempo"]
-        cleaned_df.loc[index, 'speechiness'] = song_features["speechiness"]
-        cleaned_df.loc[index, 'mode'] = song_features["mode"]
+# sort the dataframe by month and day
+sorted_df = data_pd.sort_values(by=['month', 'day'])
 
-        print(cleaned_df.loc[index])
-    except spotipy.SpotifyException as e:
-        # Rate limiting error
-        if e.http_status == 429:
-            print("Rate limited.")
-            print(e)
-            break
+# # write the dataframe to final_data.json
+# sorted_df.to_json('final_data.json', orient = 'split', compression = 'infer', index = 'true')
 
-# for index, row in data_pd.iterrows():
-#     date = datetime.fromisoformat(row["ts"])
-#     year = date.year
-#     month = date.month
-#     day = date.day
 
-#     data_pd.loc[index, 'year'] = year
-#     data_pd.loc[index, 'month'] = month
-#     data_pd.loc[index, 'day'] = day
 
+####################
+# Below code is for getting audio features from Spotify API
+####################
+
+# # Load environment variables from .env file
+# load_dotenv()
+
+# # Access environment variables
+# my_client_id = os.getenv('VITE_ID')
+# my_client_secret = os.getenv('VITE_SECRET')
+
+# client_credentials_manager = SpotifyClientCredentials(client_id=my_client_id,
+#                                                       client_secret=my_client_secret)
+# sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+# cleaned_df = data_pd.drop_duplicates(subset=['spotify_track_uri'])
+
+# for index, row in cleaned_df.iterrows():
 #     split = row["spotify_track_uri"].split(":")
 #     spotify_uri = split[2]
+    
+#     try:
+#         # more info about audio features: https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
+#         track_info = sp.audio_features([spotify_uri])
+#         song_features = track_info[0]
 
-# print("resume_index:", resume_index)
-# sorted_df = data_pd.sort_values(by=['month', 'day'])
-# # Write DataFrame to JSON file
-# # sorted_df.to_json('data.json', orient='records', lines=True)
-# sorted_df.to_json('data.json', orient = 'split', compression = 'infer', index = 'true')
+#         cleaned_df.loc[index, 'valence'] = song_features["valence"]
+#         cleaned_df.loc[index, 'energy'] = song_features["energy"]
+#         cleaned_df.loc[index, 'danceability'] = song_features["danceability"]
+#         cleaned_df.loc[index, 'acousticness'] = song_features["acousticness"]
+#         cleaned_df.loc[index, 'tempo'] = song_features["tempo"]
+#         cleaned_df.loc[index, 'speechiness'] = song_features["speechiness"]
+#         cleaned_df.loc[index, 'mode'] = song_features["mode"]
 
-# sorted_df = cleaned_df.sort_values(by=['month', 'day'])
-# Write DataFrame to JSON file
-# sorted_df.to_json('data.json', orient='records', lines=True)
+#         print(cleaned_df.loc[index])
+#     except spotipy.SpotifyException as e:
+#         # Rate limiting error
+#         if e.http_status == 429:
+#             print("Rate limited.")
+#             print(e)
+#             break
 
 # wrote song data to data.json
 # cleaned_df.to_json('data.json', orient = 'split', compression = 'infer', index = 'true')
