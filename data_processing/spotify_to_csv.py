@@ -37,7 +37,7 @@ for file_name in json_files:
             [
                 file_item
                 for file_item in file_data
-                if ((file_item["skipped"] == False) and (datetime.fromisoformat(file_item["ts"]).year == year))
+                if ((file_item["skipped"] == False) and (datetime.fromisoformat(file_item["ts"]).year == year) and (file_item["spotify_track_uri"] != None))
             ]
         )
 
@@ -54,31 +54,25 @@ data_pd = pd.DataFrame(data)[
     ]
 ]
 
-data_pd.to_json(output_file, "records")
-
 # Load environment variables from .env file
 load_dotenv()
 
 # Access environment variables
-my_client_id = os.getenv('VITE_OTHER_ID')
-my_client_secret = os.getenv('VITE_OTHER_SECRET')
+# my_client_id = os.getenv('VITE_OTHER_ID')
+# my_client_secret = os.getenv('VITE_OTHER_SECRET')
+
+my_client_id = os.getenv('VITE_ID')
+my_client_secret = os.getenv('VITE_SECRET')
 
 client_credentials_manager = SpotifyClientCredentials(client_id=my_client_id,
                                                       client_secret=my_client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-rows_to_retry = []
+cleaned_df = data_pd.drop_duplicates(subset=['spotify_track_uri'])
+resume_index = 0
+# print("cleaned_df:", cleaned_df)
 
-for index, row in data_pd.iterrows():
-    date = datetime.fromisoformat(row["ts"])
-    year = date.year
-    month = date.month
-    day = date.day
-
-    data_pd.loc[index, 'year'] = year
-    data_pd.loc[index, 'month'] = month
-    data_pd.loc[index, 'day'] = day
-
+for index, row in cleaned_df.iterrows():
     split = row["spotify_track_uri"].split(":")
     spotify_uri = split[2]
     
@@ -87,23 +81,66 @@ for index, row in data_pd.iterrows():
         track_info = sp.audio_features([spotify_uri])
         song_features = track_info[0]
 
-        data_pd.loc[index, 'valence'] = song_features["valence"]
-        data_pd.loc[index, 'energy'] = song_features["energy"]
-        data_pd.loc[index, 'danceability'] = song_features["danceability"]
-        data_pd.loc[index, 'acousticness'] = song_features["acousticness"]
-        data_pd.loc[index, 'tempo'] = song_features["tempo"]
-        data_pd.loc[index, 'speechiness'] = song_features["speechiness"]
+        cleaned_df.loc[index, 'valence'] = song_features["valence"]
+        cleaned_df.loc[index, 'energy'] = song_features["energy"]
+        cleaned_df.loc[index, 'danceability'] = song_features["danceability"]
+        cleaned_df.loc[index, 'acousticness'] = song_features["acousticness"]
+        cleaned_df.loc[index, 'tempo'] = song_features["tempo"]
+        cleaned_df.loc[index, 'speechiness'] = song_features["speechiness"]
+        cleaned_df.loc[index, 'mode'] = song_features["mode"]
 
-        print(data_pd.loc[index])
+        print(cleaned_df.loc[index])
     except spotipy.SpotifyException as e:
         if e.http_status == 429:  # Rate limiting error
-            print("Rate limited. Waiting for retry...")
-            rows_to_retry.append(index)
+            print("Rate limited.")
+            resume_index = index
             print(e)
-            time.sleep(60)  # Wait for 60 seconds before retrying
-            print(e)
+            break
+            # time.sleep(60)  # Wait for 60 seconds before retrying
 
-print(rows_to_retry)
-sorted_df = data_pd.sort_values(by=['month', 'day'])
+# for index, row in data_pd.iterrows():
+#     date = datetime.fromisoformat(row["ts"])
+#     year = date.year
+#     month = date.month
+#     day = date.day
+
+#     data_pd.loc[index, 'year'] = year
+#     data_pd.loc[index, 'month'] = month
+#     data_pd.loc[index, 'day'] = day
+
+#     split = row["spotify_track_uri"].split(":")
+#     spotify_uri = split[2]
+    
+#     try:
+#         # more info about audio features: https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
+#         track_info = sp.audio_features([spotify_uri])
+#         song_features = track_info[0]
+
+#         data_pd.loc[index, 'valence'] = song_features["valence"]
+#         data_pd.loc[index, 'energy'] = song_features["energy"]
+#         data_pd.loc[index, 'danceability'] = song_features["danceability"]
+#         data_pd.loc[index, 'acousticness'] = song_features["acousticness"]
+#         data_pd.loc[index, 'tempo'] = song_features["tempo"]
+#         data_pd.loc[index, 'speechiness'] = song_features["speechiness"]
+
+#         print(data_pd.loc[index])
+#     except spotipy.SpotifyException as e:
+#         if e.http_status == 429:  # Rate limiting error
+#             print("Rate limited. Waiting for retry...")
+#             resume_index = index
+#             print(e)
+#             # time.sleep(60)  # Wait for 60 seconds before retrying
+#             break
+
+# print("resume_index:", resume_index)
+# sorted_df = data_pd.sort_values(by=['month', 'day'])
+# # Write DataFrame to JSON file
+# # sorted_df.to_json('data.json', orient='records', lines=True)
+# sorted_df.to_json('data.json', orient = 'split', compression = 'infer', index = 'true')
+
+# sorted_df = cleaned_df.sort_values(by=['month', 'day'])
 # Write DataFrame to JSON file
-sorted_df.to_json('data.json', orient='records', lines=True)
+# sorted_df.to_json('data.json', orient='records', lines=True)
+
+print("resume_index:", resume_index)
+cleaned_df.to_json('data.json', orient = 'split', compression = 'infer', index = 'true')
