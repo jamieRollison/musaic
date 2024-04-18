@@ -57,7 +57,7 @@ data_pd = pd.DataFrame(data)[
 ]
 
 # read data from data.json for information about audio features for every unique song
-file_path = "data_processing/data.json"
+file_path = "data6.json"
 song_features = pd.read_json(file_path, orient="split", compression="infer")
 
 # loop through data_pd and add audio features to the dataframe
@@ -72,6 +72,10 @@ for index, row in data_pd.iterrows():
 
     # get the audio features for the song
     filtered_df = song_features[song_features["spotify_track_uri"] == spotify_uri]
+    if filtered_df.empty:
+        print("No song features found for ", row["master_metadata_track_name"])
+        continue
+    
     song_info = filtered_df.iloc[0]
 
     # add the audio features to the dataframe
@@ -84,10 +88,11 @@ for index, row in data_pd.iterrows():
     data_pd.loc[index, "mode"] = song_info["mode"]
 
 # sort the dataframe by month and day
-sorted_df = data_pd.sort_values(by=["month", "day"])
+data_pd1 = data_pd.dropna()
+sorted_df = data_pd1.sort_values(by=["month", "day"])
 
-# # write the dataframe to final_data.json
-# sorted_df.to_json('final_data.json', orient = 'split', compression = 'infer', index = 'true')
+# write the dataframe to final_data.json
+sorted_df.to_json('final_data2.json', orient = 'split', compression = 'infer', index = 'true')
 
 
 ####################
@@ -98,31 +103,39 @@ sorted_df = data_pd.sort_values(by=["month", "day"])
 # load_dotenv()
 
 # # Access environment variables
-# my_client_id = os.getenv('VITE_ID')
-# my_client_secret = os.getenv('VITE_SECRET')
+# my_client_id = os.getenv('VITE_OTHER_ID')
+# my_client_secret = os.getenv('VITE_OTHER_SECRET')
 
 # client_credentials_manager = SpotifyClientCredentials(client_id=my_client_id,
 #                                                       client_secret=my_client_secret)
 # sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # cleaned_df = data_pd.drop_duplicates(subset=['spotify_track_uri'])
+# resume_index = 18537
 
 # for index, row in cleaned_df.iterrows():
 #     split = row["spotify_track_uri"].split(":")
 #     spotify_uri = split[2]
 
+#     if (index < resume_index):
+#         continue
+
 #     try:
-#         # more info about audio features: https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
+#         # more info about audio features: https://developer.spotify.com/documentation/web-api/reference/get-audio-features
 #         track_info = sp.audio_features([spotify_uri])
 #         song_features = track_info[0]
 
-#         cleaned_df.loc[index, 'valence'] = song_features["valence"]
-#         cleaned_df.loc[index, 'energy'] = song_features["energy"]
-#         cleaned_df.loc[index, 'danceability'] = song_features["danceability"]
-#         cleaned_df.loc[index, 'acousticness'] = song_features["acousticness"]
-#         cleaned_df.loc[index, 'tempo'] = song_features["tempo"]
-#         cleaned_df.loc[index, 'speechiness'] = song_features["speechiness"]
-#         cleaned_df.loc[index, 'mode'] = song_features["mode"]
+#         if (song_features == None):
+#             print("No song features found for ", row["master_metadata_track_name"])
+#             continue
+#         else:
+#             cleaned_df.loc[index, 'valence'] = song_features["valence"]
+#             cleaned_df.loc[index, 'energy'] = song_features["energy"]
+#             cleaned_df.loc[index, 'danceability'] = song_features["danceability"]
+#             cleaned_df.loc[index, 'acousticness'] = song_features["acousticness"]
+#             cleaned_df.loc[index, 'tempo'] = song_features["tempo"]
+#             cleaned_df.loc[index, 'speechiness'] = song_features["speechiness"]
+#             cleaned_df.loc[index, 'mode'] = song_features["mode"]
 
 #         print(cleaned_df.loc[index])
 #     except spotipy.SpotifyException as e:
@@ -130,7 +143,17 @@ sorted_df = data_pd.sort_values(by=["month", "day"])
 #         if e.http_status == 429:
 #             print("Rate limited.")
 #             print(e)
+#             resume_index = index
 #             break
 
-# wrote song data to data.json
-cleaned_df.to_json("data.json", orient="split", compression="infer", index="true")
+# # Combine prev_song_data and cleaned_df
+# prev_song_data = pd.read_json("data4.json", orient="split", compression="infer")
+# prev_song_data1 = prev_song_data.dropna()
+
+# cleaned_df.to_json("data5.json", orient="split", compression="infer", index="true")
+# cleaned_df1 = cleaned_df.dropna()
+# cleaned_df_total = pd.concat([prev_song_data1, cleaned_df1], ignore_index=True)
+
+# # wrote song data to data6.json
+# print("resume index: ", resume_index)
+# cleaned_df_total.to_json("data6.json", orient="split", compression="infer", index="true")
