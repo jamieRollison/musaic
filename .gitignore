@@ -26,6 +26,9 @@ dist-ssr
 
 # Data
 Jamie_Data/
+Melanie_Data/
+data_processing/data6.json
+data_processing/final_data2.json
 
 # Virtual Environment
 venv_name/
