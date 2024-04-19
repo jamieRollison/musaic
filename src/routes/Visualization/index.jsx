@@ -4,6 +4,19 @@ import {useEffect, useState, useCallback} from 'react'
 import axios from 'axios'
 import { all_songs, ids_map, averages } from "./offline"
 import { colors } from './offline'
+import * as data_module from "/yearly_trends/daily_average_attributes.json";
+import { date_map } from './dailydata';
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Legend,
+  Tooltip,
+  Label,
+} from "recharts";
+import { json } from 'd3'
 
 function Visualization() {
   const token = window.localStorage.getItem('token')
@@ -141,6 +154,62 @@ function Visualization() {
     }
   , [])
 
+
+  const features = [
+    "valence",
+    "danceability",
+    "energy",
+    "acousticness",
+    "tempo",
+    "speechiness",
+  ];
+
+  const [active_features, setFeatures] = useState(features);
+  const feature_name_map = {
+    valence: "Valence",
+    danceability: "Danceability",
+    energy: "Energy",
+    acousticness: "Acousticness",
+    tempo: "Tempo",
+    speechiness: "Speechiness",
+  };
+  const feature_color_map = {
+    valence: "#55c667ff",
+    danceability: "#39568cff",
+    energy: "#287d8eff",
+    acousticness: "#b8de29ff",
+    tempo: "#481567ff",
+    speechiness: "#fde725ff",
+  };
+  const dailydata = date_map.map((item, index) => ({
+    name: index,
+    valence_avg: item.valence_avg,
+    danceability_avg: item.danceability_avg,
+    energy_avg: item.energy_avg,
+    acousticness_avg: item.acousticness_avg,
+    tempo_avg: item.tempo_avg,
+    speechiness_avg: item.speechiness_avg,
+  }));
+
+  const jsonData = date_map
+  const dates = Object.keys(jsonData)
+  // const daily_features = dates.map(date => {
+  //   const features = jsonData[date];
+  //   return {
+  //     date,
+  //     features
+  //   };
+  // });
+  // const daily_features = Object.keys(jsonData[dates[0]])
+  const daily_features = date_map.map(day => Object.values(day));
+
+  const graphData = daily_features.map(feature => ({
+    name: feature,
+    data: dates.map(date => ({ date, value: jsonData[date][feature] }))
+  }));
+  const [selectedAttribute, setSelectedAttribute] = useState('valence_avg');
+
+
   return (
     loaded ?
     (<>
@@ -189,6 +258,110 @@ function Visualization() {
               )})
             }
           </div>
+
+
+        <div className="flex justify-between pr-10">
+          <div>
+            <h1 className="text-xl font-bold">
+              {`Song Audio Features Over Time`}
+            </h1>
+            {/* <select value={selectedAttribute} onChange={(e) => setSelectedAttribute(e.target.value)}>
+                <option value="valence_avg">Valence Average</option>
+                <option value="danceability_avg">Danceability Average</option>
+                <option value="energy_avg">Energy Average</option>
+                <option value="acousticness_avg">Acousticness Average</option>
+                <option value="tempo_avg">Tempo Average</option>
+                <option value="speechiness_avg">Speechiness Average</option>
+            </select> */}
+          
+            <LineChart
+              width={1000}
+              height={500}
+              // data={dailydata}
+              margin={{ top: 5, right: 30, left: 20, bottom: 10 }}
+            >
+              <Legend style={{ marginTop: 10 }} />
+              <CartesianGrid strokeDasharray="3 3" />
+              <YAxis>
+                <Label
+                  // value={
+                  //   // overviewCategory === ""
+                  // }
+                  angle={-90}
+                  position="insideLeft"
+                />
+              </YAxis>
+              <XAxis dataKey = "date" >
+                <Label
+                  value="Date"
+                  offset={-5}
+                  position="insideBottom"
+                />
+              </XAxis>
+
+              {/* {graphData.map(({ name, data }) => (
+                <Line key={name} type="monotone" dataKey="value" data={data} name={name} />
+              ))} */}
+
+              <Tooltip />
+              {active_features.map((feature, idx) => {
+                return (
+                  <Line
+                    key={idx}
+                    type="monotone"
+                    dataKey={feature_name_map[feature]}
+                    stroke={feature_color_map[feature]}
+                    activeDot={{ r: 6 }}
+                  />
+                );
+              })}
+            </LineChart>
+
+          </div>
+
+
+          <div className="flex items-start flex-col">
+            <h2 className="font-primary">Select Feature(s)</h2>
+            {features.map((f, idx) => {
+              return (
+                <div key={idx} style={{ marginBottom: "10px" }}>
+                  <input
+                    type="checkbox"
+                    id={f}
+                    name={f}
+                    checked={active_features.includes(f)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFeatures([...active_features, f]);
+                      } else {
+                        setFeatures(active_features.filter((g) => g !== f));
+                      }
+                    }}
+                  />
+                  <label htmlFor={f} style={{ marginLeft: "5px" }}>
+                    {f}
+                  </label>
+                </div>
+              );
+            })}
+            <div className="space-x-3">
+              <button
+                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+                onClick={() => setFeatures(features)}
+              >
+                Select All
+              </button>
+              <button
+                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+                onClick={() => setFeatures([])}
+              >
+                Deselect All
+              </button>
+            </div>
+          </div>
+        </div>      
+
+
         </div>
       </div>
     </>) : (
