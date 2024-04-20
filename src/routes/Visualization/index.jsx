@@ -165,6 +165,13 @@ function Visualization() {
   ];
 
   const [active_features, setFeatures] = useState(features);
+  const handleAttributeChange = (attribute) => {
+    if (active_features.includes(attribute)) {
+        setFeatures(active_features.filter(attr => attr !== attribute));
+    } else {
+        setFeatures([...active_features, attribute]);
+    }
+};
   const feature_name_map = {
     valence: "Valence",
     danceability: "Danceability",
@@ -181,34 +188,31 @@ function Visualization() {
     tempo: "#481567ff",
     speechiness: "#fde725ff",
   };
-  const dailydata = date_map.map((item, index) => ({
-    name: index,
-    valence_avg: item.valence_avg,
-    danceability_avg: item.danceability_avg,
-    energy_avg: item.energy_avg,
-    acousticness_avg: item.acousticness_avg,
-    tempo_avg: item.tempo_avg,
-    speechiness_avg: item.speechiness_avg,
-  }));
+  // const dailydata = date_map.map((item, index) => ({
+  //   name: index,
+  //   valence_avg: item.valence_avg,
+  //   danceability_avg: item.danceability_avg,
+  //   energy_avg: item.energy_avg,
+  //   acousticness_avg: item.acousticness_avg,
+  //   tempo_avg: item.tempo_avg,
+  //   speechiness_avg: item.speechiness_avg,
+  // }));
 
-  const jsonData = date_map
-  const dates = Object.keys(jsonData)
-  // const daily_features = dates.map(date => {
-  //   const features = jsonData[date];
-  //   return {
-  //     date,
-  //     features
-  //   };
-  // });
-  // const daily_features = Object.keys(jsonData[dates[0]])
-  const daily_features = date_map.map(day => Object.values(day));
+  // const jsonData = date_map;
+  // const dates = Object.keys(jsonData);
+  // const daily_features = Object.keys(jsonData[dates]);
+    // const daily_features = Object.keys(jsonData[dates[0]]);
+  // const daily_features = date_map.map(day => Object.values(day));
 
-  const graphData = daily_features.map(feature => ({
-    name: feature,
-    data: dates.map(date => ({ date, value: jsonData[date][feature] }))
-  }));
-  const [selectedAttribute, setSelectedAttribute] = useState('valence_avg');
+  // const graphData = daily_features.map(feature => ({
+  //   name: feature,
+  //   data: dates.map(date => ({ date, value: jsonData[date][feature] }))
+  // }));
 
+  const transformedData = Object.entries(date_map).map(([date, attributes]) => ({
+    date, // x-axis
+    ...attributes, // y-axis attributes
+  }));  
 
   return (
     loaded ?
@@ -264,20 +268,26 @@ function Visualization() {
           <div>
             <h1 className="text-xl font-bold">
               {`Song Audio Features Over Time`}
-            </h1>
-            {/* <select value={selectedAttribute} onChange={(e) => setSelectedAttribute(e.target.value)}>
-                <option value="valence_avg">Valence Average</option>
-                <option value="danceability_avg">Danceability Average</option>
-                <option value="energy_avg">Energy Average</option>
-                <option value="acousticness_avg">Acousticness Average</option>
-                <option value="tempo_avg">Tempo Average</option>
-                <option value="speechiness_avg">Speechiness Average</option>
-            </select> */}
-          
+            </h1>  
+            <div>
+                <label>
+                    <input type="checkbox" value="valence_avg" onChange={() => handleAttributeChange("valence_avg")} />
+                    Valence Average
+                </label>
+                <label>
+                    <input type="checkbox" value="danceability_avg" onChange={() => handleAttributeChange("danceability_avg")} />
+                    Danceability Average
+                </label>
+                <label>
+                    <input type="checkbox" value="energy_avg" onChange={() => handleAttributeChange("energy_avg")} />
+                    Energy Average
+                </label>
+                {/* Add more checkboxes for other attributes */}
+            </div>
             <LineChart
               width={1000}
               height={500}
-              // data={dailydata}
+              data={transformedData}
               margin={{ top: 5, right: 30, left: 20, bottom: 10 }}
             >
               <Legend style={{ marginTop: 10 }} />
@@ -291,20 +301,19 @@ function Visualization() {
                   position="insideLeft"
                 />
               </YAxis>
-              <XAxis dataKey = "date" >
+              <XAxis dataKey = "date">
                 <Label
                   value="Date"
                   offset={-5}
                   position="insideBottom"
                 />
               </XAxis>
-
-              {/* {graphData.map(({ name, data }) => (
-                <Line key={name} type="monotone" dataKey="value" data={data} name={name} />
-              ))} */}
-
               <Tooltip />
-              {active_features.map((feature, idx) => {
+              {active_features.map((attr, index) => (
+                    <Line key={index} type="monotone" dataKey={attr} stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} />
+                ))}
+
+              {/* {active_features.map((feature, idx) => {
                 return (
                   <Line
                     key={idx}
@@ -314,13 +323,23 @@ function Visualization() {
                     activeDot={{ r: 6 }}
                   />
                 );
-              })}
-            </LineChart>
+              })} */}
 
+              {/* makes all the dates show up on the page */}
+              {/* {graphData.map(({ name, daily_features }) => (    
+                  <Line key={name} type="monotone" dataKey={name} data={daily_features} name={name} />
+              ))} */}
+              {/* {graphData.map(({ name, daily_features }) => (
+                  active_features[name] && (
+                      <Line key={name} type="monotone" dataKey={name} data={daily_features} name={name} />
+                  )
+              ))} */}
+
+            </LineChart>
           </div>
 
 
-          <div className="flex items-start flex-col">
+          {/* <div className="flex items-start flex-col">
             <h2 className="font-primary">Select Feature(s)</h2>
             {features.map((f, idx) => {
               return (
@@ -358,7 +377,7 @@ function Visualization() {
                 Deselect All
               </button>
             </div>
-          </div>
+          </div> */}
         </div>      
 
 
