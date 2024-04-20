@@ -51,11 +51,11 @@ export default MoodStringGenerator = (monthProps) => {
     const [first, next] = k1.length > k2.length ? [k2, o1] : [k1, o2]
     return first.filter(k => k in next)
   }
-  found_features = intersect_keys(monthProps, tertiles);
-  total = found_features.length
+  const found_features = intersect_keys(monthProps, tertiles);
+  const total = found_features.length
   return found_features.reduce((rv, feature, idx) => {
-    [thres1, thres2] = tertiles[feature]
-    monthVal = monthProps[feature]
+    const [thres1, thres2] = tertiles[feature]
+    const monthVal = monthProps[feature]
     if (monthVal < thres1) {
       return rv + tertile_labels[feature].lo + (idx !== total-1 ? ', ' : '')
     } else if (thres1 <= monthVal && monthVal < thres2) {
