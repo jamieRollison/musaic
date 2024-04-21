@@ -7,7 +7,7 @@ import os
 # Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), 
 # while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
-with open('data_processing/final_data_records_jamie.json', 'r') as file:
+with open('/Users/anami/Documents/musaic/data_processing/final_data_records_jamie.json', 'r') as file:
     # Load the JSON data into a Python dictionary
     data = json.load(file)
 
@@ -60,7 +60,7 @@ for day, attributes in attributes_by_date.items():
         'tempo_avg': sum(attributes['tempo_avg'])/len(attributes['tempo_avg']),
         'speechiness_avg': sum(attributes['speechiness_avg'])/len(attributes['speechiness_avg'])
     }
-with open('yearly_trends/daily_average_attributes.json', 'w') as output_file:
+with open('yearly_trends/daily_average_attributes_melanie.json', 'w') as output_file:
     json.dump(average_daily_attributes, output_file, indent=4)
 
 
@@ -90,30 +90,30 @@ for day, speeches in speechiness_by_date.items():
     average_daily_speechiness[day] = (sum(speeches)/len(speeches))
 
 
-# Write the average daily valence values to a file
-with open('yearly_trends/average_daily_valence.txt', 'w') as output_file:
-    for day, average_valence in average_daily_valence.items():
-        output_file.write(f"{day}: {average_valence}\n")
+# # Write the average daily valence values to a file
+# with open('yearly_trends/average_daily_valence.txt', 'w') as output_file:
+#     for day, average_valence in average_daily_valence.items():
+#         output_file.write(f"{day}: {average_valence}\n")
 
-with open('yearly_trends/average_daily_danceability.txt', 'w') as output_file:
-    for day, average_danceability in average_daily_danceability.items():
-        output_file.write(f"{day}: {average_danceability}\n")
+# with open('yearly_trends/average_daily_danceability.txt', 'w') as output_file:
+#     for day, average_danceability in average_daily_danceability.items():
+#         output_file.write(f"{day}: {average_danceability}\n")
 
-with open('yearly_trends/average_daily_energy.txt', 'w') as output_file:
-    for day, average_energy in average_daily_energy.items():
-        output_file.write(f"{day}: {average_energy}\n")
+# with open('yearly_trends/average_daily_energy.txt', 'w') as output_file:
+#     for day, average_energy in average_daily_energy.items():
+#         output_file.write(f"{day}: {average_energy}\n")
 
-with open('yearly_trends/average_daily_acousticness.txt', 'w') as output_file:
-    for day, average_acousticness in average_daily_acousticness.items():
-        output_file.write(f"{day}: {average_acousticness}\n")
+# with open('yearly_trends/average_daily_acousticness.txt', 'w') as output_file:
+#     for day, average_acousticness in average_daily_acousticness.items():
+#         output_file.write(f"{day}: {average_acousticness}\n")
 
-with open('yearly_trends/average_daily_tempo.txt', 'w') as output_file:
-    for day, average_tempo in average_daily_tempo.items():
-        output_file.write(f"{day}: {average_tempo}\n")
+# with open('yearly_trends/average_daily_tempo.txt', 'w') as output_file:
+#     for day, average_tempo in average_daily_tempo.items():
+#         output_file.write(f"{day}: {average_tempo}\n")
 
-with open('yearly_trends/average_daily_speechiness.txt', 'w') as output_file:
-    for day, average_speechiness in average_daily_speechiness.items():
-        output_file.write(f"{day}: {average_speechiness}\n")
+# with open('yearly_trends/average_daily_speechiness.txt', 'w') as output_file:
+#     for day, average_speechiness in average_daily_speechiness.items():
+#         output_file.write(f"{day}: {average_speechiness}\n")
 
 
 # for day, average_tempo in average_daily_valence.items():    # FOR TESTING
@@ -127,7 +127,7 @@ def convert_to_date(str_date):
     return f"2023-{month}-{day}"
 
 # Read data from the original JSON file
-with open('/Users/anami/Documents/musaic/yearly_trends/daily_average_attributes.json', 'r') as file:
+with open('/Users/anami/Documents/musaic/yearly_trends/daily_average_attributes_melanie.json', 'r') as file:
     dData = json.load(file)
 
 # Convert string dates to JavaScript Date objects
@@ -136,7 +136,7 @@ for key, value in dData.items():
     new_data[convert_to_date(key)] = value
 
 # Write the updated data to a new JavaScript file
-with open('yearly_trends/date_formatted_dailydata.js', 'w') as file:
+with open('yearly_trends/date_formatted_melanie_dailydata.js', 'w') as file:
     file.write('const newData = ')
     json.dump(new_data, file, indent=4)
     file.write(';')

@@ -188,6 +188,14 @@ function Visualization() {
     tempo_avg: "#481567ff",
     speechiness_avg: "#fde725ff",
   };
+  const feature_yaxis_map = {
+    valence_avg: "left",
+    danceability_avg: "left",
+    energy_avg: "left",
+    acousticness_avg: "left",
+    tempo_avg: "right",
+    speechiness_avg: "left",
+  };
   const transformedData = Object.entries(date_map).map(([date, attributes]) => ({
     date, // x-axis
     ...attributes, // y-axis attributes
@@ -249,20 +257,28 @@ function Visualization() {
               {`Song Audio Features Over Time`}
             </h1>  
             <LineChart
-              width={1500}
-              height={700}
+              width={2000}
+              height={1000}
               data={transformedData}
-              margin={{ top: 15, right: 20, left: 20, bottom: 20 }}
+              margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
             >
               <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/>
               <CartesianGrid strokeDasharray="3 3" stroke = "#ccc"/>
-              <YAxis>
+              <YAxis yAxisId="left">
                 <Label
-                  // value={
-                  //   // overviewCategory === ""
-                  // }
                   angle={-90}
+                  value="Units"
+                  fontSize={30}
                   position="insideLeft"
+                />
+              </YAxis>
+              <YAxis yAxisId="right" orientation="right">
+                <Label
+                    angle={90}
+                    value="Beats per Minute (BPM)"
+                    fontSize={30}
+                    offset={-30}
+                    position="middle"
                 />
               </YAxis>
               <XAxis dataKey = "date">
@@ -277,6 +293,7 @@ function Visualization() {
               {active_features.map((feature, index) => {
                 return (
                     <Line 
+                      yAxisId={feature_yaxis_map[feature]}
                       key={index} 
                       type="monotone" 
                       dataKey={feature} 
@@ -286,7 +303,6 @@ function Visualization() {
                       />
                 );
               })}
-
             </LineChart>
             
             <div>
@@ -327,31 +343,6 @@ function Visualization() {
                     Deselect All
                   </button>
                 </div>
-
-                {/* <label style={{ color: feature_color_map['valence'] }}>
-                    <input type="checkbox" value="valence_avg" onChange={() => handleFeatureChange("valence_avg")} checked={true} />
-                    Valence Average
-                </label>
-                <label style={{ color: feature_color_map['danceability'] }}>
-                    <input type="checkbox" value="danceability_avg" onChange={() => handleFeatureChange("danceability_avg")} />
-                    Danceability Average
-                </label>
-                <label style={{ color: feature_color_map['energy'] }}>
-                    <input type="checkbox" value="energy_avg" onChange={() => handleFeatureChange("energy_avg")} />
-                    Energy Average
-                </label>
-                <label style={{ color: feature_color_map['acousticness'] }}>
-                    <input type="checkbox" value="acousticness_avg" onChange={() => handleFeatureChange("acousticness_avg")} />
-                    Acousticness Average
-                </label>
-                <label style={{ color: feature_color_map['tempo'] }}>
-                    <input type="checkbox" value="tempo_avg" onChange={() => handleFeatureChange("tempo_avg")} />
-                    Tempo Average
-                </label>
-                <label style={{ color: feature_color_map['speechiness'] }}>
-                    <input type="checkbox" value="speechiness_avg" onChange={() => handleFeatureChange("speechiness_avg")} />
-                    Speechiness Average
-                </label> */}      
             </div>
           </div>
         </div>      
