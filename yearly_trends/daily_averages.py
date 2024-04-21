@@ -7,7 +7,7 @@ import os
 # Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), 
 # while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
-with open('/Users/anami/Documents/musaic/data_processing/final_data_records_jamie.json', 'r') as file:
+with open('data_processing/final_data_records_jamie.json', 'r') as file:
     # Load the JSON data into a Python dictionary
     data = json.load(file)
 
