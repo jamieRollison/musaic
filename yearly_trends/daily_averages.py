@@ -118,3 +118,25 @@ with open('yearly_trends/average_daily_speechiness.txt', 'w') as output_file:
 
 # for day, average_tempo in average_daily_valence.items():    # FOR TESTING
 #     print(f"{day}, average valence: {average_valence}")
+
+
+
+
+def convert_to_date(str_date):
+    month, day = map(int, str_date.split('-'))
+    return f"2023-{month}-{day}"
+
+# Read data from the original JSON file
+with open('/Users/anami/Documents/musaic/yearly_trends/daily_average_attributes.json', 'r') as file:
+    dData = json.load(file)
+
+# Convert string dates to JavaScript Date objects
+new_data = {}
+for key, value in dData.items():
+    new_data[convert_to_date(key)] = value
+
+# Write the updated data to a new JavaScript file
+with open('yearly_trends/date_formatted_dailydata.js', 'w') as file:
+    file.write('const newData = ')
+    json.dump(new_data, file, indent=4)
+    file.write(';')

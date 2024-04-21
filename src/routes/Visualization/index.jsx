@@ -156,59 +156,38 @@ function Visualization() {
 
 
   const features = [
-    "valence",
-    "danceability",
-    "energy",
-    "acousticness",
-    "tempo",
-    "speechiness",
+    "valence_avg",
+    "danceability_avg",
+    "energy_avg",
+    "acousticness_avg",
+    "tempo_avg",
+    "speechiness_avg",
   ];
 
   const [active_features, setFeatures] = useState(features);
-  const handleAttributeChange = (attribute) => {
+  const handleFeatureChange = (attribute) => {
     if (active_features.includes(attribute)) {
         setFeatures(active_features.filter(attr => attr !== attribute));
     } else {
         setFeatures([...active_features, attribute]);
     }
-};
+  };
   const feature_name_map = {
-    valence: "Valence",
-    danceability: "Danceability",
-    energy: "Energy",
-    acousticness: "Acousticness",
-    tempo: "Tempo",
-    speechiness: "Speechiness",
+    valence_avg: "Valence",
+    danceability_avg: "Danceability",
+    energy_avg: "Energy",
+    acousticness_avg: "Acousticness",
+    tempo_avg: "Tempo",
+    speechiness_avg: "Speechiness",
   };
   const feature_color_map = {
-    valence: "#55c667ff",
-    danceability: "#39568cff",
-    energy: "#287d8eff",
-    acousticness: "#b8de29ff",
-    tempo: "#481567ff",
-    speechiness: "#fde725ff",
+    valence_avg: "#55c667ff",
+    danceability_avg: "#39568cff",
+    energy_avg: "#287d8eff",
+    acousticness_avg: "#b8de29ff",
+    tempo_avg: "#481567ff",
+    speechiness_avg: "#fde725ff",
   };
-  // const dailydata = date_map.map((item, index) => ({
-  //   name: index,
-  //   valence_avg: item.valence_avg,
-  //   danceability_avg: item.danceability_avg,
-  //   energy_avg: item.energy_avg,
-  //   acousticness_avg: item.acousticness_avg,
-  //   tempo_avg: item.tempo_avg,
-  //   speechiness_avg: item.speechiness_avg,
-  // }));
-
-  // const jsonData = date_map;
-  // const dates = Object.keys(jsonData);
-  // const daily_features = Object.keys(jsonData[dates]);
-    // const daily_features = Object.keys(jsonData[dates[0]]);
-  // const daily_features = date_map.map(day => Object.values(day));
-
-  // const graphData = daily_features.map(feature => ({
-  //   name: feature,
-  //   data: dates.map(date => ({ date, value: jsonData[date][feature] }))
-  // }));
-
   const transformedData = Object.entries(date_map).map(([date, attributes]) => ({
     date, // x-axis
     ...attributes, // y-axis attributes
@@ -269,29 +248,14 @@ function Visualization() {
             <h1 className="text-xl font-bold">
               {`Song Audio Features Over Time`}
             </h1>  
-            <div>
-                <label>
-                    <input type="checkbox" value="valence_avg" onChange={() => handleAttributeChange("valence_avg")} />
-                    Valence Average
-                </label>
-                <label>
-                    <input type="checkbox" value="danceability_avg" onChange={() => handleAttributeChange("danceability_avg")} />
-                    Danceability Average
-                </label>
-                <label>
-                    <input type="checkbox" value="energy_avg" onChange={() => handleAttributeChange("energy_avg")} />
-                    Energy Average
-                </label>
-                {/* Add more checkboxes for other attributes */}
-            </div>
             <LineChart
-              width={1000}
-              height={500}
+              width={1500}
+              height={700}
               data={transformedData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 10 }}
+              margin={{ top: 15, right: 20, left: 20, bottom: 20 }}
             >
-              <Legend style={{ marginTop: 10 }} />
-              <CartesianGrid strokeDasharray="3 3" />
+              <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/>
+              <CartesianGrid strokeDasharray="3 3" stroke = "#ccc"/>
               <YAxis>
                 <Label
                   // value={
@@ -304,80 +268,92 @@ function Visualization() {
               <XAxis dataKey = "date">
                 <Label
                   value="Date"
-                  offset={-5}
+                  fontSize={30}
+                  offset={-15}
                   position="insideBottom"
                 />
               </XAxis>
               <Tooltip />
-              {active_features.map((attr, index) => (
-                    <Line key={index} type="monotone" dataKey={attr} stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} />
-                ))}
-
-              {/* {active_features.map((feature, idx) => {
+              {active_features.map((feature, index) => {
                 return (
-                  <Line
-                    key={idx}
-                    type="monotone"
-                    dataKey={feature_name_map[feature]}
-                    stroke={feature_color_map[feature]}
-                    activeDot={{ r: 6 }}
-                  />
+                    <Line 
+                      key={index} 
+                      type="monotone" 
+                      dataKey={feature} 
+                      stroke={feature_color_map[feature]} 
+                      strokeWidth={2.5}
+                      activeDot={{ r: 6 }}
+                      />
                 );
-              })} */}
-
-              {/* makes all the dates show up on the page */}
-              {/* {graphData.map(({ name, daily_features }) => (    
-                  <Line key={name} type="monotone" dataKey={name} data={daily_features} name={name} />
-              ))} */}
-              {/* {graphData.map(({ name, daily_features }) => (
-                  active_features[name] && (
-                      <Line key={name} type="monotone" dataKey={name} data={daily_features} name={name} />
-                  )
-              ))} */}
+              })}
 
             </LineChart>
-          </div>
-
-
-          {/* <div className="flex items-start flex-col">
-            <h2 className="font-primary">Select Feature(s)</h2>
-            {features.map((f, idx) => {
-              return (
-                <div key={idx} style={{ marginBottom: "10px" }}>
-                  <input
-                    type="checkbox"
-                    id={f}
-                    name={f}
-                    checked={active_features.includes(f)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setFeatures([...active_features, f]);
-                      } else {
-                        setFeatures(active_features.filter((g) => g !== f));
-                      }
-                    }}
-                  />
-                  <label htmlFor={f} style={{ marginLeft: "5px" }}>
-                    {f}
-                  </label>
+            
+            <div>
+              <h3 className="text-xl font-bold">Select Track Audio Features</h3>
+                  {features.map((feature, idx) => {
+                  return (
+                    <div key={idx} style={{ marginBottom: "10px" }}>
+                      <input
+                        type="checkbox"
+                        id={feature}
+                        name={feature}
+                        checked={active_features.includes(feature)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFeatures([...active_features, feature]);
+                          } else {
+                            setFeatures(active_features.filter((g) => g !== feature));
+                          }
+                        }}
+                      />
+                      <label htmlFor={feature} style={{ marginLeft: "5px" }}>
+                        {feature_name_map[feature]}
+                      </label>
+                    </div>
+                  );
+                })}
+                <div className="space-x-3">
+                  <button
+                    className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+                    onClick={() => setFeatures(features)}
+                  >
+                    Select All
+                  </button>
+                  <button
+                    className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+                    onClick={() => setFeatures([])}
+                  >
+                    Deselect All
+                  </button>
                 </div>
-              );
-            })}
-            <div className="space-x-3">
-              <button
-                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-                onClick={() => setFeatures(features)}
-              >
-                Select All
-              </button>
-              <button
-                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-                onClick={() => setFeatures([])}
-              >
-                Deselect All
-              </button>
+
+                {/* <label style={{ color: feature_color_map['valence'] }}>
+                    <input type="checkbox" value="valence_avg" onChange={() => handleFeatureChange("valence_avg")} checked={true} />
+                    Valence Average
+                </label>
+                <label style={{ color: feature_color_map['danceability'] }}>
+                    <input type="checkbox" value="danceability_avg" onChange={() => handleFeatureChange("danceability_avg")} />
+                    Danceability Average
+                </label>
+                <label style={{ color: feature_color_map['energy'] }}>
+                    <input type="checkbox" value="energy_avg" onChange={() => handleFeatureChange("energy_avg")} />
+                    Energy Average
+                </label>
+                <label style={{ color: feature_color_map['acousticness'] }}>
+                    <input type="checkbox" value="acousticness_avg" onChange={() => handleFeatureChange("acousticness_avg")} />
+                    Acousticness Average
+                </label>
+                <label style={{ color: feature_color_map['tempo'] }}>
+                    <input type="checkbox" value="tempo_avg" onChange={() => handleFeatureChange("tempo_avg")} />
+                    Tempo Average
+                </label>
+                <label style={{ color: feature_color_map['speechiness'] }}>
+                    <input type="checkbox" value="speechiness_avg" onChange={() => handleFeatureChange("speechiness_avg")} />
+                    Speechiness Average
+                </label> */}      
             </div>
-          </div> */}
+          </div>
         </div>      
 
 
