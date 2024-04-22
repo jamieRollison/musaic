@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from 'react-router-dom'
 import Root from './routes/root'
@@ -14,22 +15,18 @@ import Login from './routes/Login'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />
-  },
-  {
-    path: "login",
-    element: <Login />
+    element: <Navigate to="/visualization"/>
   },
   // {
-  //   path: "visualization",
-  //   element: <Visualization />
+  //   path: "login",
+  //   element: <Login />
+  // },
+  // {
+  //   path: "loading",
+  //   element: <TempLoading />
   // },
   {
-    path: "loading",
-    element: <TempLoading />
-  },
-  {
-    path: "visualization",
+    path: "/visualization",
     element: <Visualization />
   }
 ])
