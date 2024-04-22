@@ -4,7 +4,7 @@ tertiles = {
   'danceability': [0.5026666666666569, 0.655], 
   'acousticness': [0.0451, 0.429], 
   'tempo': [106.64166666666662, 132.67499999999995], 
-  'speechiness': [0.0394, 0.067], 
+  // 'speechiness': [0.0394, 0.067], 
   // 'mode': [0.0, 1.0], 
 };
 
@@ -30,15 +30,15 @@ tertile_labels = {
     'hi': 'Natural',
   },
   'tempo': {
-    'lo': 'Slow',
-    'me': 'Moderate',
-    'hi': 'Fast',
+    'lo': 'Mellow',
+    'me': 'Groovy',
+    'hi': 'Upbeat',
   },
-  'speechiness': {
-    'lo': 'Instrumental',
-    'me': 'Vocal',
-    'hi': 'Talkative',
-  },
+  // 'speechiness': {
+  //   'lo': 'Instrumental',
+  //   'me': 'Vocal',
+  //   'hi': 'Talkative',
+  // },
   // 'mode': {
   //   'lo': ,
   //   'hi': ,
