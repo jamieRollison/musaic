@@ -195,7 +195,6 @@ function Visualization() {
             }
           </div>
         </div>
-        </div>
       </div>
       <VisLineGraph/>
     </>) : (
