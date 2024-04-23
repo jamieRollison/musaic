@@ -144,6 +144,7 @@ function Visualization() {
 
 
 
+
   return (
     loaded ?
     (<>
@@ -193,6 +194,7 @@ function Visualization() {
               )})
             }
           </div>
+        </div>
         </div>
       </div>
       <VisLineGraph/>
