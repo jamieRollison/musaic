@@ -1,4 +1,4 @@
-import * as data_module from "/yearly_trends/daily_average_attributes.json";
+// import * as data_module from "/yearly_trends/daily_average_attributes.json";
 import { date_map } from '../../routes/Visualization/dailydata';
 import {
   LineChart,
@@ -9,8 +9,9 @@ import {
   Legend,
   Tooltip,
   Label,
+  ResponsiveContainer
 } from "recharts";
-import { json } from 'd3'
+// import { json } from 'd3'
 import { useState } from "react";
 
 export default function VisLineGraph() {
@@ -60,14 +61,12 @@ export default function VisLineGraph() {
   }));  
 
   return (
-    <div className="flex justify-between pr-10">
-      <div>
-        <h1 className="text-xl font-bold">
-          {`Song Audio Features Over Time`}
-        </h1>  
+    <div className="linegraph">
+      <h1 className="font-secondary">
+        {`Song Audio Features Over Time`}
+      </h1>  
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={2000}
-          height={1000}
           data={transformedData}
           margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
         >
@@ -113,45 +112,45 @@ export default function VisLineGraph() {
             );
           })}
         </LineChart>
-        
-        <div>
-          <h3 className="text-xl font-bold">Select Track Audio Features</h3>
-              {features.map((feature, idx) => {
-              return (
-                <div key={idx} style={{ marginBottom: "10px" }}>
-                  <input
-                    type="checkbox"
-                    id={feature}
-                    name={feature}
-                    checked={active_features.includes(feature)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setFeatures([...active_features, feature]);
-                      } else {
-                        setFeatures(active_features.filter((g) => g !== feature));
-                      }
-                    }}
-                  />
-                  <label htmlFor={feature} style={{ marginLeft: "5px" }}>
-                    {feature_name_map[feature]}
-                  </label>
-                </div>
-              );
-            })}
-            <div className="space-x-3">
-              <button
-                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-                onClick={() => setFeatures(features)}
-              >
-                Select All
-              </button>
-              <button
-                className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-                onClick={() => setFeatures([])}
-              >
-                Deselect All
-              </button>
-            </div>
+      </ResponsiveContainer>
+      
+      <div>
+        <h3 className="text-xl font-bold">Select Track Audio Features</h3>
+            {features.map((feature, idx) => {
+            return (
+              <div key={idx} style={{ marginBottom: "10px" }}>
+                <input
+                  type="checkbox"
+                  id={feature}
+                  name={feature}
+                  checked={active_features.includes(feature)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFeatures([...active_features, feature]);
+                    } else {
+                      setFeatures(active_features.filter((g) => g !== feature));
+                    }
+                  }}
+                />
+                <label htmlFor={feature} style={{ marginLeft: "5px" }}>
+                  {feature_name_map[feature]}
+                </label>
+              </div>
+            );
+          })}
+        <div className="space-x-3">
+          <button
+            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+            onClick={() => setFeatures(features)}
+          >
+            Select All
+          </button>
+          <button
+            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
+            onClick={() => setFeatures([])}
+          >
+            Deselect All
+          </button>
         </div>
       </div>
     </div>      
