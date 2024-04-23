@@ -122,26 +122,27 @@ body {
 /* Visualization area grid */
 .vis-grid {
   display: grid;
-  grid-template-rows: max-content max-content;
+  grid-template-rows: 2.2em max-content;
   grid-template-columns: 2fr 3fr;
   grid-template-areas:
     "year month"
     "dial most";
-  margin: 2vh 2vw;
+  margin: 1vh 1vw;
 }
 
 .item-year {
   display: flex;
-  font-size: 1em;
+  font-size: 1.3em;
   grid-area: year;
   margin: auto;
   place-items: center;
   text-wrap: wrap;
+  text-anchor: middle;
 }
 
 .item-month {
   display: flex;
-  font-size: 0.85em;
+  font-size: 1.3em;
   grid-area: month;
   margin: auto;
   place-items: center;
@@ -174,7 +175,7 @@ body {
   font-style: normal;
   font-weight: 500;
   font-size: 0.8em;
-  line-height: 2em;
+  line-height: 1.5em;
   letter-spacing: 0.06em;
   color: #000000;
 }
@@ -182,6 +183,7 @@ body {
 .item-most .image-row {
   display: flex;
   flex-direction: row;
+  margin: 0.6em 0px;
 }
 
 .item-most .image-row .sample {
@@ -287,7 +289,7 @@ body {
 }
 
 .image-container img {
-  width: 75%;
+  width: 55%;
   height: auto;
 }
 

@@ -172,7 +172,8 @@ function Visualization() {
               const [id, quality] = item
               return (
                 <div key={i} className='image-container'>
-                  <img src={ids_map[id].image.url} alt={ids_map[id].name} className='album'/>
+                  <img src={ids_map[id].image.url} alt={ids_map[id].name}
+                   className='album'/>
                   <p>{ids_map[id].name}</p>
                   <p>{`${lens}: ${quality}`}</p>
                 </div>
