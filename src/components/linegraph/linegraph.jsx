@@ -61,59 +61,63 @@ export default function VisLineGraph() {
   }));  
 
   return (
-    <div className="linegraph">
-      <h1 className="font-secondary">
-        {`Song Audio Features Over Time`}
-      </h1>  
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={transformedData}
-          margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-        >
-          <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/>
-          <CartesianGrid strokeDasharray="3 3" stroke = "#ccc"/>
-          <YAxis yAxisId="left">
-            <Label
-              angle={-90}
-              value="Units"
-              fontSize={30}
-              position="insideLeft"
-            />
-          </YAxis>
-          <YAxis yAxisId="right" orientation="right">
-            <Label
-                angle={90}
-                value="Beats per Minute (BPM)"
-                fontSize={30}
+    <div className='div-lgraph'>
+      <div className="linegraph">
+        <h1 className="font-secondary">
+          {`Song Audio Features Over Time`}
+        </h1>  
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={transformedData}
+            margin={{ top: 0, right: 50, left: 50, bottom: 40}}
+          >
+            {/* <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/> */}
+            <CartesianGrid strokeDasharray="3 3" stroke = "#ccc"/>
+            <YAxis yAxisId="left" className="linegraph-tick-labels">
+              <Label
+                angle={-90}
+                value="Units"
+                position="insideLeft"
+                offset={-10}
+                className="linegraph-labels"
+              />
+            </YAxis>
+            <YAxis yAxisId="right" orientation="right" 
+              className="linegraph-tick-labels">
+              <Label
+                  angle={90}
+                  value="Beats per Minute (BPM)"
+                  offset={-20}
+                  position="insideRight"
+                  className="linegraph-labels"
+              />
+            </YAxis>
+            <XAxis interval={28} dataKey="date" 
+              className="linegraph-tick-labels">
+              <Label
+                value="Date"
                 offset={-30}
-                position="middle"
-            />
-          </YAxis>
-          <XAxis dataKey = "date">
-            <Label
-              value="Date"
-              fontSize={30}
-              offset={-15}
-              position="insideBottom"
-            />
-          </XAxis>
-          <Tooltip />
-          {active_features.map((feature, index) => {
-            return (
-                <Line 
-                  yAxisId={feature_yaxis_map[feature]}
-                  key={index} 
-                  type="monotone" 
-                  dataKey={feature} 
-                  stroke={feature_color_map[feature]} 
-                  strokeWidth={2.5}
-                  activeDot={{ r: 6 }}
-                  />
-            );
-          })}
-        </LineChart>
-      </ResponsiveContainer>
-      
+                position="insideBottom"
+                className="linegraph-labels"
+              />
+            </XAxis>
+            <Tooltip />
+            {active_features.map((feature, index) => {
+              return (
+                  <Line 
+                    yAxisId={feature_yaxis_map[feature]}
+                    key={index} 
+                    type="monotone" 
+                    dataKey={feature} 
+                    stroke={feature_color_map[feature]} 
+                    strokeWidth={2.5}
+                    activeDot={{ r: 6 }}
+                    />
+              );
+            })}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>      
       <div>
         <h3 className="text-xl font-bold">Select Track Audio Features</h3>
             {features.map((feature, idx) => {
@@ -153,6 +157,6 @@ export default function VisLineGraph() {
           </button>
         </div>
       </div>
-    </div>      
+    </div>
   )
 }

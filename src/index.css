@@ -312,12 +312,45 @@ body {
   margin: 0.5em;
 }
 
-.linegraph {
+.div-lgraph {
   width: 100%;
-  height: 65vh;
+  /* height: 75vh; */
+  height: auto;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 100px;
+  padding: 0px 100px;
+}
+
+.linegraph {
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-wrap: nowrap;
   gap: 10px;
+}
+
+.linegraph-tick-labels {
+  font-family: "Baskerville";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.85em;
+  line-height: 2em;
+  color: #000000;
+}
+
+.linegraph-labels {
+  font-family: "Baskerville";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.4em;
+  line-height: 2em;
+  color: #000000;
+  text-anchor: middle;
 }
