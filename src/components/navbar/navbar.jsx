@@ -1,30 +1,35 @@
-import { Link } from "react-router-dom"
+import PropTypes from "prop-types";
 
-function Navbar() {
+function Navbar({ setData }) {
   return (
     <>
       <header>
-        <div className='nav-container'>
-          <nav className='navbar'>
-            <img src='/musaic-logo.svg' style={{height: '2em'}}/>
+        <div className="nav-container">
+          <nav className="navbar">
+            <img src="/musaic-logo.svg" style={{ height: "2em" }} />
             <ul>
-              <li className='font-username'>BLC5</li>
-              <li>
-                {/* TODO: Sign out! */}
-                <Link to={'/'}>
-                  <button className="green-button" onClick={() => {
-                    window.localStorage.removeItem('token')
-                  }}>
-                    <h3 className="font-primary">Sign Out</h3>
-                  </button>
-                </Link>
-              </li>
+              <select
+                defaultValue={0}
+                className="green-button"
+                onChange={(event) => setData(event.target.value)}
+              >
+                <option className="font-primary" value={0}>
+                  Jamie
+                </option>
+                <option className="font-primary" value={1}>
+                  Melanie
+                </option>
+              </select>
             </ul>
           </nav>
         </div>
       </header>
     </>
-  )
+  );
 }
 
-export default Navbar
+Navbar.propTypes = {
+  setData: PropTypes.func,
+};
+
+export default Navbar;

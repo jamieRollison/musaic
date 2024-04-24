@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import * as d3 from "d3"
-import PropTypes from 'prop-types'
-import { colors } from "../../routes/Visualization/offline"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as d3 from "d3";
+import PropTypes from "prop-types";
+import { colors } from "../../routes/Visualization/data/offline";
 
 /**
  * I just COULD NOT get the D3 pie graph to be responsive, so I gave up.
@@ -23,7 +23,7 @@ import { colors } from "../../routes/Visualization/offline"
 //       .attr("perserveAspectRatio", "xMinYMid")
 //       .call(resize);
 
-//   // to register multiple listeners for same event type, 
+//   // to register multiple listeners for same event type,
 //   // you need to add namespace, i.e., 'click.foo'
 //   // necessary if you call invoke this function for multiple svgs
 //   // api docs: https://github.com/mbostock/d3/wiki/Selections#on
@@ -37,31 +37,69 @@ import { colors } from "../../routes/Visualization/offline"
 //   }
 // }
 
-
-
-function Dial({data, changeMonth, lens}) {
-  const svgRef = useRef()
-  const monthMap = useMemo(() =>{return {
-    'JAN':1, 'FEB':2, 'MAR':3, 'APR':4, 'MAY':5, 'JUN':6,
-    'JUL':7, 'AUG':8, 'SEP':9, 'OCT':10, 'NOV':11, 'DEC':12
-  }}, [])
+function Dial({ data, changeMonth, lens }) {
+  const svgRef = useRef();
+  const monthMap = useMemo(() => {
+    return {
+      JAN: 1,
+      FEB: 2,
+      MAR: 3,
+      APR: 4,
+      MAY: 5,
+      JUN: 6,
+      JUL: 7,
+      AUG: 8,
+      SEP: 9,
+      OCT: 10,
+      NOV: 11,
+      DEC: 12,
+    };
+  }, []);
   const reverseMonthMap = useMemo(() => {
-    return {0: 'Full Year', 1:'January', 2:'February', 3:'March', 4:'April', 5:'May', 6:'June', 7:'July', 8:'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
-  }, [])
+    return {
+      0: "Full Year",
+      1: "January",
+      2: "February",
+      3: "March",
+      4: "April",
+      5: "May",
+      6: "June",
+      7: "July",
+      8: "August",
+      9: "September",
+      10: "October",
+      11: "November",
+      12: "December",
+    };
+  }, []);
 
-  const [currentMonth, setCurrentMonth] = useState(0)
-  const months = Object.keys(monthMap)
-  const total = data.reduce((acc, month) => {
-    acc.valence += month.valence
-    acc.energy += month.energy
-    acc.danceability += month.danceability
-    return acc
-  }, {valence: 0, energy: 0, danceability: 0})
+  const [currentMonth, setCurrentMonth] = useState(0);
+  const months = Object.keys(monthMap);
+  const total = data.reduce(
+    (acc, month) => {
+      acc.valence += month.valence;
+      acc.energy += month.energy;
+      acc.danceability += month.danceability;
+      return acc;
+    },
+    { valence: 0, energy: 0, danceability: 0 }
+  );
 
-
-  const getMoods = useCallback(() => currentMonth !== 0 ? 
-  [`Valence: ${data[currentMonth-1].valence.toFixed(2)}`, `Energy: ${data[currentMonth-1].energy.toFixed(2)}`, `Danceability: ${data[currentMonth-1].danceability.toFixed(2)}`] :
-  [`Valence: ${(total.valence / 12).toFixed(2)}`, `Energy: ${(total.energy / 12).toFixed(2)}`, `Danceability: ${(total.danceability / 12).toFixed(2)}`], [currentMonth, data, total])
+  const getMoods = useCallback(
+    () =>
+      currentMonth !== 0
+        ? [
+            `Valence: ${data[currentMonth - 1].valence.toFixed(2)}`,
+            `Energy: ${data[currentMonth - 1].energy.toFixed(2)}`,
+            `Danceability: ${data[currentMonth - 1].danceability.toFixed(2)}`,
+          ]
+        : [
+            `Valence: ${(total.valence / 12).toFixed(2)}`,
+            `Energy: ${(total.energy / 12).toFixed(2)}`,
+            `Danceability: ${(total.danceability / 12).toFixed(2)}`,
+          ],
+    [currentMonth, data, total]
+  );
 
   // ].reduce((acc, m) => {
   //   acc.push({month: m, id: acc.length+1})
@@ -70,11 +108,12 @@ function Dial({data, changeMonth, lens}) {
 
   // draw the dial
   useEffect(() => {
-    const svg = d3.select(svgRef.current)
-      .attr('width', 450)
-      .attr('height', 450)
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", 600)
+      .attr("height", 600);
 
-    // TODO: Query and get dict of Mood -> Color 
+    // TODO: Query and get dict of Mood -> Color
     // const moodMap = {
     //   'Joyful': '#ffff00',
     //   'Mysterious': '#c71585',
@@ -82,48 +121,46 @@ function Dial({data, changeMonth, lens}) {
     // }
     // const colors = Object.values(moodMap)
     // const moods = Object.keys(moodMap)
-    const colorScale = d3.scaleQuantize().
-      domain([0, 1]).
-      range(colors)
+    const colorScale = d3.scaleQuantize().domain([0, 1]).range(colors);
+    const tempoColorScale = d3.scaleQuantize().domain([0, 200]).range(colors);
 
     // CONSTANTS GALORE
-    const WIDTH = svg.attr('width')
-    const HEIGHT = svg.attr('height')
+    const WIDTH = svg.attr("width");
+    const HEIGHT = svg.attr("height");
 
-    const PAD = {h: 20, v: 20}
-    const P_WIDTH = WIDTH - 2*PAD.h
-    const P_HEIGHT = HEIGHT - 2*PAD.v
+    const PAD = { h: 20, v: 20 };
+    const P_WIDTH = WIDTH - 2 * PAD.h;
+    const P_HEIGHT = HEIGHT - 2 * PAD.v;
 
-    const LABEL_INNER_RADIUS = Math.min(P_WIDTH, P_HEIGHT)/3
-    const LABEL_OUTER_RADIUS = Math.min(P_WIDTH, P_HEIGHT)/2
-    const LABEL_MEDIAN_RADIUS = 
-      LABEL_INNER_RADIUS + ((LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS)/2)
-    const LABEL_CENTERLINE_LENGTH = 2 * Math.PI * LABEL_MEDIAN_RADIUS
-    const LABEL_MONTH_CENTERLINE_LENGTH = 
-      LABEL_CENTERLINE_LENGTH / months.length
-    const LABEL_RADIUS_SIZE = LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS
-    const LABEL_PADDING = 0.035
-    const LABEL_CORNER_RADIUS = 10
+    const LABEL_INNER_RADIUS = Math.min(P_WIDTH, P_HEIGHT) / 3;
+    const LABEL_OUTER_RADIUS = Math.min(P_WIDTH, P_HEIGHT) / 2;
+    const LABEL_MEDIAN_RADIUS =
+      LABEL_INNER_RADIUS + (LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS) / 2;
+    const LABEL_CENTERLINE_LENGTH = 2 * Math.PI * LABEL_MEDIAN_RADIUS;
+    const LABEL_MONTH_CENTERLINE_LENGTH =
+      LABEL_CENTERLINE_LENGTH / months.length;
+    const LABEL_RADIUS_SIZE = LABEL_OUTER_RADIUS - LABEL_INNER_RADIUS;
+    const LABEL_PADDING = 0.035;
+    const LABEL_CORNER_RADIUS = 10;
 
     const MOODS_LINE_PADDING = 75;
-    const MOOD_SPACER = 
-      (2*LABEL_INNER_RADIUS - 2*MOODS_LINE_PADDING)/(4)
-    const MOODS_Y_STARTER = HEIGHT/2 - LABEL_INNER_RADIUS + MOODS_LINE_PADDING
-    const MOODS_FONT_SIZE = 20 // px
+    const MOOD_SPACER = (2 * LABEL_INNER_RADIUS - 2 * MOODS_LINE_PADDING) / 4;
+    const MOODS_Y_STARTER =
+      HEIGHT / 2 - LABEL_INNER_RADIUS + MOODS_LINE_PADDING;
+    const MOODS_FONT_SIZE = 20; // px
 
-
-
-    const pie = d3.pie().value(1)
-    const arc = d3.arc()
+    const pie = d3.pie().value(1);
+    const arc = d3
+      .arc()
       .innerRadius(LABEL_INNER_RADIUS)
       .outerRadius(LABEL_OUTER_RADIUS)
       .padAngle(LABEL_PADDING)
-      .cornerRadius(LABEL_CORNER_RADIUS)
+      .cornerRadius(LABEL_CORNER_RADIUS);
 
     // Ordering
-    svg.append('g').attr('id', 'base')
-    svg.append('g').attr('id', 'blend')
-    svg.append('g').attr('id', 'moods')
+    svg.append("g").attr("id", "base");
+    svg.append("g").attr("id", "blend");
+    svg.append("g").attr("id", "moods");
 
     /**
      * Gradient coloring for the base circle, code from:
@@ -155,56 +192,65 @@ function Dial({data, changeMonth, lens}) {
      * https://www.visualcinnamon.com/2015/09/placing-text-on-arcs/
      */
     // Draw the arcs themselves
-    svg.select("#blend").selectAll('.monthArc')
+    svg
+      .select("#blend")
+      .selectAll(".monthArc")
       .data(pie(months))
-      .join('path')
-        .attr('class', 'monthArc')
-        .attr('id', (d, i) => 'monthArc_'+i) // unique id for each slice
-        .attr('d', arc)
-        .attr('transform', `translate(${WIDTH/2}, ${HEIGHT/2})`)
-        .style('fill', (d, i) => colorScale(data[i][lens]))
+      .join("path")
+      .attr("class", "monthArc")
+      .attr("id", (d, i) => "monthArc_" + i) // unique id for each slice
+      .attr("d", arc)
+      .attr("transform", `translate(${WIDTH / 2}, ${HEIGHT / 2})`)
+      .style("fill", (d, i) =>
+        lens === "tempo"
+          ? tempoColorScale(data[i][lens])
+          : colorScale(data[i][lens])
+      );
 
     // Append the month names to each slice
-    svg.select("#blend").selectAll(".monthText")
+    svg
+      .select("#blend")
+      .selectAll(".monthText")
       .data(months)
-      .enter().append("text")
-        .attr("class", "monthText")
-        .attr('x', LABEL_MONTH_CENTERLINE_LENGTH*0.30)
-        .attr('dy', LABEL_RADIUS_SIZE*0.60)
-        .append("textPath")
-        .attr("xlink:href", (d,i) => "#monthArc_"+i)
-        .text(d => d)
-        .style('color', 'white')
-        .on('click', (event, d) => {
-          console.log(d, monthMap[d])
-          setCurrentMonth(monthMap[d])
-          changeMonth(monthMap[d])
-          // Remove the current month text
-          svg.select("#moods").selectAll(".currentMonthText").remove();
-          svg.select("#moods").selectAll(".moodsText").remove();
+      .enter()
+      .append("text")
+      .attr("class", "monthText")
+      .attr("x", LABEL_MONTH_CENTERLINE_LENGTH * 0.3)
+      .attr("dy", LABEL_RADIUS_SIZE * 0.6)
+      .append("textPath")
+      .attr("xlink:href", (d, i) => "#monthArc_" + i)
+      .text((d) => d)
+      .style("color", "white")
+      .on("click", (event, d) => {
+        console.log(d, monthMap[d]);
+        setCurrentMonth(monthMap[d]);
+        changeMonth(monthMap[d]);
+        // Remove the current month text
+        svg.select("#moods").selectAll(".currentMonthText").remove();
+        svg.select("#moods").selectAll(".moodsText").remove();
 
-          // // Top Moods list for that month
-          // svg.select("#moods").selectAll(".moodsText")
-          //   .data(moods)
-          //   .enter().append("text")
-          //     .attr("class", "moodsText")
-          //     .attr('x', (WIDTH/2))
-          //     .attr('y', 
-          //       (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-          //     .text(d => d)
-          //     .style('fill', 'black');
+        // // Top Moods list for that month
+        // svg.select("#moods").selectAll(".moodsText")
+        //   .data(moods)
+        //   .enter().append("text")
+        //     .attr("class", "moodsText")
+        //     .attr('x', (WIDTH/2))
+        //     .attr('y',
+        //       (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
+        //     .text(d => d)
+        //     .style('fill', 'black');
 
-      //     svg.select("#moods").selectAll(".moodsText")
-      // .data(['a','b','c'])
-      // .enter().append("text")
-      //   .attr("class", "moodsText")
-      //   .attr('x', (WIDTH/2))
-      //   .attr('y', 
-      //     (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-      //   .text(d => d)
-      //   .style('fill', 'black')
-      //   .style('font-size', MOODS_FONT_SIZE);
-        })
+        //     svg.select("#moods").selectAll(".moodsText")
+        // .data(['a','b','c'])
+        // .enter().append("text")
+        //   .attr("class", "moodsText")
+        //   .attr('x', (WIDTH/2))
+        //   .attr('y',
+        //     (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
+        //   .text(d => d)
+        //   .style('fill', 'black')
+        //   .style('font-size', MOODS_FONT_SIZE);
+      });
 
     // Top Moods list for that month
     // const moods = ['Mysterious', 'Joyful']
@@ -213,59 +259,74 @@ function Dial({data, changeMonth, lens}) {
     //   .enter().append("text")
     //     .attr("class", "moodsText")
     //     .attr('x', (WIDTH/2))
-    //     .attr('y', 
+    //     .attr('y',
     //       (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
     //     .text(d => d)
     //     .style('fill', d => moodMap[d])
     //     .style('font-size', MOODS_FONT_SIZE)
 
     // Top Moods list for that month
-    svg.select("#moods").selectAll(".moodsText")
+    svg
+      .select("#moods")
+      .selectAll(".moodsText")
       .data(getMoods())
-      .enter().append("text")
-        .attr("class", "moodsText")
-        .attr('x', (WIDTH/2))
-        .attr('y', 
-          (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-        .text(d => d)
-        .style('fill', 'black')
-        .style('font-size', MOODS_FONT_SIZE);
-    
+      .enter()
+      .append("text")
+      .attr("class", "moodsText")
+      .attr("x", WIDTH / 2)
+      .attr(
+        "y",
+        (d, i) => MOODS_Y_STARTER + (i + 1) * MOOD_SPACER + MOODS_FONT_SIZE / 4
+      )
+      .text((d) => d)
+      .style("fill", "black")
+      .style("font-size", MOODS_FONT_SIZE);
+
     // Current month
-    svg.select("#moods").append("text")
+    svg
+      .select("#moods")
+      .append("text")
       .attr("class", "currentMonthText")
-      .attr('x', (WIDTH/2))
-      .attr('y', MOODS_Y_STARTER - MOODS_FONT_SIZE/4)
+      .attr("x", WIDTH / 2)
+      .attr("y", MOODS_Y_STARTER - MOODS_FONT_SIZE / 4)
       .text(reverseMonthMap[currentMonth])
-      .style('fill', 'black')
-      .style('font-size', MOODS_FONT_SIZE);
-    
+      .style("fill", "black")
+      .style("font-size", MOODS_FONT_SIZE);
 
     // Top Moods list for that month
-    svg.select("#moods").selectAll(".moodsText")
-      .data(['a','b','c'])
-      .enter().append("text")
-        .attr("class", "moodsText")
-        .attr('x', (WIDTH/2))
-        .attr('y', 
-          (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-        .text(d => d)
-        .style('fill', 'black')
-        .style('font-size', MOODS_FONT_SIZE);
-    
-      
-      
-  }, [months, changeMonth, monthMap, currentMonth, data, reverseMonthMap, getMoods])
+    svg
+      .select("#moods")
+      .selectAll(".moodsText")
+      .data(["a", "b", "c"])
+      .enter()
+      .append("text")
+      .attr("class", "moodsText")
+      .attr("x", WIDTH / 2)
+      .attr(
+        "y",
+        (d, i) => MOODS_Y_STARTER + (i + 1) * MOOD_SPACER + MOODS_FONT_SIZE / 4
+      )
+      .text((d) => d)
+      .style("fill", "black")
+      .style("font-size", MOODS_FONT_SIZE);
+  }, [
+    months,
+    changeMonth,
+    monthMap,
+    currentMonth,
+    data,
+    reverseMonthMap,
+    getMoods,
+    lens,
+  ]);
 
-  return (
-      <svg ref={svgRef}></svg>
-  )
+  return <svg ref={svgRef}></svg>;
 }
 
 Dial.propTypes = {
   data: PropTypes.array.isRequired,
   changeMonth: PropTypes.func.isRequired,
-  lens: PropTypes.string.isRequired
-}
+  lens: PropTypes.string.isRequired,
+};
 
-export default Dial
+export default Dial;
