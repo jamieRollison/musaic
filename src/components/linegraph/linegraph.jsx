@@ -14,6 +14,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 export default function VisLineGraph({ data }) {
+  console.log(data);
+
   const formatMonth = (date) => {
     const monthNames = [
       "January",
@@ -29,42 +31,48 @@ export default function VisLineGraph({ data }) {
       "November",
       "December",
     ];
-    const [month, day] = date.split("-");
-    return `${monthNames[parseInt(month) - 1]} ${day}`;
+    return date
+      .split(":")
+      .map((d) => {
+        console.log(d);
+        const [month, day] = d.split("-");
+        return `${monthNames[parseInt(month) - 1]} ${day}`;
+      })
+      .join(" to ");
   };
 
   const features = [
-    "valence_avg",
-    "danceability_avg",
-    "energy_avg",
-    "acousticness_avg",
-    "tempo_avg",
-    "speechiness_avg",
+    "valence",
+    "danceability",
+    "energy",
+    "acousticness",
+    "tempo",
+    "speechiness",
   ];
   const [active_features, setFeatures] = useState(features);
   const feature_name_map = {
-    valence_avg: "Valence",
-    danceability_avg: "Danceability",
-    energy_avg: "Energy",
-    acousticness_avg: "Acousticness",
-    tempo_avg: "Tempo",
-    speechiness_avg: "Speechiness",
+    valence: "Valence",
+    danceability: "Danceability",
+    energy: "Energy",
+    acousticness: "Acousticness",
+    tempo: "Tempo",
+    speechiness: "Speechiness",
   };
   const feature_color_map = {
-    valence_avg: "#55c667ff",
-    danceability_avg: "#39568cff",
-    energy_avg: "#287d8eff",
-    acousticness_avg: "#b8de29ff",
-    tempo_avg: "#481567ff",
-    speechiness_avg: "#fde725ff",
+    valence: "#55c667ff",
+    danceability: "#39568cff",
+    energy: "#287d8eff",
+    acousticness: "#b8de29ff",
+    tempo: "#481567ff",
+    speechiness: "#fde725ff",
   };
   const feature_yaxis_map = {
-    valence_avg: "left",
-    danceability_avg: "left",
-    energy_avg: "left",
-    acousticness_avg: "left",
-    tempo_avg: "right",
-    speechiness_avg: "left",
+    valence: "left",
+    danceability: "left",
+    energy: "left",
+    acousticness: "left",
+    tempo: "right",
+    speechiness: "left",
   };
   const transformedData = Object.entries(data).map(([date, attributes]) => ({
     date, // x-axis
@@ -77,7 +85,7 @@ export default function VisLineGraph({ data }) {
         <h1 className="font-secondary">{`Song Audio Features Over Time`}</h1>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={transformedData}
+            data={data}
             margin={{ top: 0, right: 50, left: 50, bottom: 40 }}
           >
             {/* <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/> */}
@@ -131,7 +139,7 @@ export default function VisLineGraph({ data }) {
                   dataKey={feature}
                   stroke={feature_color_map[feature]}
                   strokeWidth={2.5}
-                  activeDot={{ r: 6 }}
+                  dot={false}
                 />
               );
             })}
@@ -182,5 +190,5 @@ export default function VisLineGraph({ data }) {
 }
 
 VisLineGraph.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.arrayOf(PropTypes.object),
 };

@@ -8,6 +8,7 @@ import monthlyData from "./data/monthly_averages.json";
 import top_songs from "./data/top_songs.json";
 import bottom_songs from "./data/bottom_songs.json";
 import art_map from "./data/album_art.json";
+import rollingData from "./data/rolling_avg.json";
 
 function Visualization() {
   const [lens, setLens] = useState("valence");
@@ -118,7 +119,7 @@ function Visualization() {
           </div>
         </div>
       </div>
-      <VisLineGraph data={date_map[dataIdx]} />
+      <VisLineGraph data={rollingData[dataIdx]} />
     </>
   );
 }
