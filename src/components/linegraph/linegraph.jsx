@@ -13,22 +13,22 @@ import {
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function VisLineGraph({ data }) {
+export default function VisLineGraph({ data, setMonth }) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const formatMonth = (date) => {
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
     return date
       .split(":")
       .map((d) => {
@@ -75,55 +75,72 @@ export default function VisLineGraph({ data }) {
   return (
     <div className="div-lgraph">
       <h3 className="text-2xl font-bold">Select Track Audio Features</h3>
-      <div className="flex justify-between items-center">
-        {features.map((feature, idx) => {
-          return (
-            <div
-              key={idx}
-              className="font-primary font-md flex flex-row text-center space-x-2"
-            >
-              <input
-                type="checkbox"
-                id={feature}
-                name={feature}
-                checked={active_features.includes(feature)}
-                className={`appearance-none h-5 self-center w-5 border border-black rounded-md checked:border-transparent checked:text-black checked:font-bold checked:font-primary`}
-                style={
-                  active_features.includes(feature)
-                    ? { backgroundColor: feature_color_map[feature] }
-                    : { border: `2px solid ${feature_color_map[feature]}` }
-                }
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setFeatures([...active_features, feature]);
-                  } else {
-                    setFeatures(active_features.filter((g) => g !== feature));
-                  }
-                }}
-              />
-              <label
-                className="flex items-center justify-between"
-                htmlFor={feature}
+      <div>
+        <div className="flex justify-between items-center">
+          {features.map((feature, idx) => {
+            return (
+              <div
+                key={idx}
+                className="font-primary font-md flex flex-row text-center space-x-2"
               >
-                {feature_name_map[feature]}
-                {/* <div className={` h-5 w-5 border border-black mx-1`} /> */}
-              </label>
-            </div>
-          );
-        })}
-        <div className="space-x-3">
-          <button
-            className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
-            onClick={() => setFeatures(features)}
-          >
-            Select All
-          </button>
-          <button
-            className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
-            onClick={() => setFeatures([])}
-          >
-            Deselect All
-          </button>
+                <input
+                  type="checkbox"
+                  id={feature}
+                  name={feature}
+                  checked={active_features.includes(feature)}
+                  className={`appearance-none h-5 self-center w-5 border border-black rounded-md checked:border-transparent checked:text-black checked:font-bold checked:font-primary`}
+                  style={
+                    active_features.includes(feature)
+                      ? { backgroundColor: feature_color_map[feature] }
+                      : { border: `2px solid ${feature_color_map[feature]}` }
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFeatures([...active_features, feature]);
+                    } else {
+                      setFeatures(active_features.filter((g) => g !== feature));
+                    }
+                  }}
+                />
+                <label
+                  className="flex items-center justify-between"
+                  htmlFor={feature}
+                >
+                  {feature_name_map[feature]}
+                  {/* <div className={` h-5 w-5 border border-black mx-1`} /> */}
+                </label>
+              </div>
+            );
+          })}
+          <div className="space-x-3">
+            <button
+              className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+              onClick={() => setFeatures(features)}
+            >
+              Select All
+            </button>
+            <button
+              className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+              onClick={() => setFeatures([])}
+            >
+              Deselect All
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-between items-center w-4/5">
+          {["Full Year", ...monthNames].map((month, idx) => {
+            return (
+              <button
+                key={idx}
+                className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+                onClick={() => {
+                  setMonth(idx);
+                }}
+              >
+                {month}
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="linegraph">
@@ -200,4 +217,5 @@ export default function VisLineGraph({ data }) {
 
 VisLineGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
+  setMonth: PropTypes.func.isRequired,
 };

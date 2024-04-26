@@ -125,12 +125,15 @@ body {
 /* Visualization area grid */
 .vis-grid {
   display: grid;
-  grid-template-rows: 2.2em max-content;
+  grid-template-rows: 1em max-content max-content max-content;
   grid-template-columns: 4fr 3fr;
   grid-template-areas:
     "year month"
-    "dial most";
+    "dial most"
+    "viewchange most"
+    "lgraph lgraph";
   margin: 1vh 1vw;
+  gap: 2.5em;
 }
 
 .item-year {
@@ -160,15 +163,14 @@ body {
 }
 
 .item-most {
-  margin-top: 1em;
-  margin-right: 1em;
+  margin: 1em 1em 1em 0em;
   display: flex;
   grid-area: most;
   flex-direction: column;
-  justify-content: baseline;
   gap: 0.5em;
   padding: 0.5em 0em;
   height: auto;
+  max-height: 800px;
 }
 
 .item-most h3 {
@@ -273,12 +275,12 @@ body {
   padding: 0.5em;
   border: none;
   border-radius: 1em;
-  background-color: #1ed760;
+  background-color: #55c667ff;
   color: black;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.5em;
+  font-size: 0.55em;
   line-height: 2em;
   letter-spacing: 0.06em;
   cursor: pointer;
@@ -331,6 +333,7 @@ body {
   flex-wrap: nowrap;
   gap: 100px;
   padding: 0px 100px;
+  grid-area: lgraph;
 }
 
 .linegraph {
@@ -365,4 +368,12 @@ body {
 
 .data-select {
   border-radius: 2em;
+}
+.item-viewswitcher {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* visibility: hidden; */
+  grid-area: viewchange;
+  gap: 1em;
 }

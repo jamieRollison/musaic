@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 import { colors } from "../../routes/Visualization/data/offline";
@@ -37,7 +37,7 @@ import { colors } from "../../routes/Visualization/data/offline";
 //   }
 // }
 
-function Dial({ data, changeMonth, lens, setLens }) {
+function Dial({ data, month, changeMonth, lens, setLens }) {
   const lenses = [
     "valence",
     "energy",
@@ -81,34 +81,37 @@ function Dial({ data, changeMonth, lens, setLens }) {
     };
   }, []);
 
-  const [currentMonth, setCurrentMonth] = useState(0);
   const months = Object.keys(monthMap);
-  const total = data.reduce(
-    (acc, month) => {
-      acc.valence += month.valence;
-      acc.energy += month.energy;
-      acc.acousticness += month.acousticness;
-      acc.danceability += month.danceability;
-      acc.tempo += month.tempo;
-      acc.speechiness += month.speechiness;
-      return acc;
-    },
-    {
-      valence: 0,
-      energy: 0,
-      danceability: 0,
-      tempo: 0,
-      speechiness: 0,
-      acousticness: 0,
-    }
+  const total = useMemo(
+    () =>
+      data.reduce(
+        (acc, m) => {
+          acc.valence += m.valence;
+          acc.energy += m.energy;
+          acc.acousticness += m.acousticness;
+          acc.danceability += m.danceability;
+          acc.tempo += m.tempo;
+          acc.speechiness += m.speechiness;
+          return acc;
+        },
+        {
+          valence: 0,
+          energy: 0,
+          danceability: 0,
+          tempo: 0,
+          speechiness: 0,
+          acousticness: 0,
+        }
+      ),
+    [data]
   );
 
   const getMoods = useCallback(
     () =>
-      currentMonth !== 0
-        ? [`${lens}: ${data[currentMonth - 1][lens].toFixed(2)}`]
+      month !== 0
+        ? [`${lens}: ${data[month - 1][lens].toFixed(2)}`]
         : [`${lens}: ${(total[lens] / 12).toFixed(2)}`],
-    [currentMonth, data, total, lens]
+    [month, data, total, lens]
   );
 
   const render = useCallback(
@@ -211,7 +214,8 @@ function Dial({ data, changeMonth, lens, setLens }) {
           lens === "tempo"
             ? tempoColorScale(data[i][lens])
             : colorScale(data[i][lens])
-        );
+        )
+        .style("stroke", (d, i) => (i === month - 1 ? "black" : "none"));
 
       // Append the month names to each slice
       svg
@@ -228,10 +232,13 @@ function Dial({ data, changeMonth, lens, setLens }) {
         .text((d) => d)
         .style("color", "white")
         .on("click", (event, d) => {
-          console.log(d, monthMap[d]);
-          if (monthMap[d] !== currentMonth) {
-            setCurrentMonth(monthMap[d]);
+          if (monthMap[d] !== month) {
             changeMonth(monthMap[d]);
+            // Remove the current month text
+            svg.select("#moods").selectAll(".currentMonthText").remove();
+            svg.select("#moods").selectAll(".moodsText").remove();
+          } else {
+            changeMonth(0);
             // Remove the current month text
             svg.select("#moods").selectAll(".currentMonthText").remove();
             svg.select("#moods").selectAll(".moodsText").remove();
@@ -298,19 +305,11 @@ function Dial({ data, changeMonth, lens, setLens }) {
         .attr("class", "currentMonthText")
         .attr("x", WIDTH / 2)
         .attr("y", MOODS_Y_STARTER - MOODS_FONT_SIZE / 4)
-        .text(reverseMonthMap[currentMonth])
+        .text(reverseMonthMap[month])
         .style("fill", "black")
         .style("font-size", MOODS_FONT_SIZE);
     },
-    [
-      data,
-      currentMonth,
-      monthMap,
-      reverseMonthMap,
-      getMoods,
-      changeMonth,
-      months,
-    ]
+    [data, month, monthMap, reverseMonthMap, getMoods, changeMonth, months]
   );
 
   // ].reduce((acc, m) => {
@@ -320,28 +319,12 @@ function Dial({ data, changeMonth, lens, setLens }) {
 
   // draw the dial
   useEffect(() => {
-    // Top Moods list for that month
-    // svg
-    //   .select("#moods")
-    //   .selectAll(".moodsText")
-    //   .data(["a", "b", "c"])
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "moodsText")
-    //   .attr("x", WIDTH / 2)
-    //   .attr(
-    //     "y",
-    //     (d, i) => MOODS_Y_STARTER + (i + 1) * MOOD_SPACER + MOODS_FONT_SIZE / 4
-    //   )
-    //   .text((d) => d)
-    //   .style("fill", "black")
-    //   .style("font-size", MOODS_FONT_SIZE);
     render(lens);
   }, [
     months,
     changeMonth,
     monthMap,
-    currentMonth,
+    month,
     data,
     reverseMonthMap,
     getMoods,
@@ -352,16 +335,19 @@ function Dial({ data, changeMonth, lens, setLens }) {
   return (
     <>
       <div className="lens-buttons">
-        {lenses.map((lens) => (
+        {lenses.map((text) => (
           <button
-            key={lens}
-            style={{ color: lens === lens ? "white" : "black" }}
+            key={text}
+            style={{
+              border: lens === text ? "2px solid black" : "none",
+              color: "white",
+            }}
             onClick={() => {
-              setLens(lens);
-              render(lens);
+              setLens(text);
+              render(text);
             }}
           >
-            {lens}
+            {text}
           </button>
         ))}
       </div>
@@ -377,6 +363,7 @@ function Dial({ data, changeMonth, lens, setLens }) {
 
 Dial.propTypes = {
   data: PropTypes.array.isRequired,
+  month: PropTypes.number.isRequired,
   changeMonth: PropTypes.func.isRequired,
   lens: PropTypes.string.isRequired,
   setLens: PropTypes.func.isRequired,
