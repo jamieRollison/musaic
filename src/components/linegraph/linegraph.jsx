@@ -14,8 +14,6 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 export default function VisLineGraph({ data }) {
-  console.log(data);
-
   const formatMonth = (date) => {
     const monthNames = [
       "January",
@@ -34,7 +32,6 @@ export default function VisLineGraph({ data }) {
     return date
       .split(":")
       .map((d) => {
-        console.log(d);
         const [month, day] = d.split("-");
         return `${monthNames[parseInt(month) - 1]} ${day}`;
       })
@@ -74,13 +71,61 @@ export default function VisLineGraph({ data }) {
     tempo: "right",
     speechiness: "left",
   };
-  const transformedData = Object.entries(data).map(([date, attributes]) => ({
-    date, // x-axis
-    ...attributes, // y-axis attributes
-  }));
 
   return (
     <div className="div-lgraph">
+      <h3 className="text-2xl font-bold">Select Track Audio Features</h3>
+      <div className="flex justify-between items-center">
+        {features.map((feature, idx) => {
+          return (
+            <div
+              key={idx}
+              className="font-primary font-md flex flex-row text-center space-x-2"
+            >
+              <input
+                type="checkbox"
+                id={feature}
+                name={feature}
+                checked={active_features.includes(feature)}
+                className={`appearance-none h-5 self-center w-5 border border-black rounded-md checked:border-transparent checked:text-black checked:font-bold checked:font-primary`}
+                style={
+                  active_features.includes(feature)
+                    ? { backgroundColor: feature_color_map[feature] }
+                    : { border: `2px solid ${feature_color_map[feature]}` }
+                }
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setFeatures([...active_features, feature]);
+                  } else {
+                    setFeatures(active_features.filter((g) => g !== feature));
+                  }
+                }}
+              />
+              <label
+                className="flex items-center justify-between"
+                htmlFor={feature}
+              >
+                {feature_name_map[feature]}
+                {/* <div className={` h-5 w-5 border border-black mx-1`} /> */}
+              </label>
+            </div>
+          );
+        })}
+        <div className="space-x-3">
+          <button
+            className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+            onClick={() => setFeatures(features)}
+          >
+            Select All
+          </button>
+          <button
+            className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+            onClick={() => setFeatures([])}
+          >
+            Deselect All
+          </button>
+        </div>
+      </div>
       <div className="linegraph">
         <h1 className="font-secondary">{`Song Audio Features Over Time`}</h1>
         <ResponsiveContainer width="100%" height="100%">
@@ -116,6 +161,9 @@ export default function VisLineGraph({ data }) {
               interval={28}
               dataKey="date"
               className="linegraph-tick-labels"
+              tickFormatter={(date) => {
+                return date.split(":")[0];
+              }}
             >
               <Label
                 value="Date"
@@ -145,45 +193,6 @@ export default function VisLineGraph({ data }) {
             })}
           </LineChart>
         </ResponsiveContainer>
-      </div>
-      <div>
-        <h3 className="text-xl font-bold">Select Track Audio Features</h3>
-        {features.map((feature, idx) => {
-          return (
-            <div key={idx} style={{ marginBottom: "10px" }}>
-              <input
-                type="checkbox"
-                id={feature}
-                name={feature}
-                checked={active_features.includes(feature)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setFeatures([...active_features, feature]);
-                  } else {
-                    setFeatures(active_features.filter((g) => g !== feature));
-                  }
-                }}
-              />
-              <label htmlFor={feature} style={{ marginLeft: "5px" }}>
-                {feature_name_map[feature]}
-              </label>
-            </div>
-          );
-        })}
-        <div className="space-x-3">
-          <button
-            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-            onClick={() => setFeatures(features)}
-          >
-            Select All
-          </button>
-          <button
-            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-            onClick={() => setFeatures([])}
-          >
-            Deselect All
-          </button>
-        </div>
       </div>
     </div>
   );

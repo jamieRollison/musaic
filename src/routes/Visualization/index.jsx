@@ -1,9 +1,7 @@
 import Navbar from "../../components/navbar/navbar";
 import Dial from "../../components/dial/dial";
-import { useEffect, useState, useCallback } from "react";
-import { colors } from "./data/offline";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import VisLineGraph from "../../components/linegraph/linegraph";
-import { date_map } from "./data/dailydata";
 import monthlyData from "./data/monthly_averages.json";
 import top_songs from "./data/top_songs.json";
 import bottom_songs from "./data/bottom_songs.json";
@@ -12,19 +10,7 @@ import rollingData from "./data/rolling_avg.json";
 
 function Visualization() {
   const [lens, setLens] = useState("valence");
-  const lenses = [
-    "valence",
-    "energy",
-    "danceability",
-    "acousticness",
-    "tempo",
-    "speechiness",
-  ];
   const [dataIdx, setDataIdx] = useState(0);
-
-  useEffect(() => {
-    console.log(dataIdx);
-  }, [dataIdx]);
 
   const monthValues = [
     "Click on a month!",
@@ -49,6 +35,40 @@ function Visualization() {
     setMonth(nextMonth);
   }, []);
 
+  const monthCutoff = useMemo(() => {
+    const cutoffs = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      rollingData[dataIdx].length,
+    ];
+    rollingData[dataIdx].forEach((d, idx) => {
+      const date = d.date.split(":")[0];
+      const month = parseInt(date.split("-")[0]);
+      if (month > 1 && cutoffs[month - 1] === 0) {
+        cutoffs[month - 1] = idx;
+      }
+    });
+    return cutoffs;
+  }, [dataIdx]);
+
+  useEffect(() => {
+    console.log(dataIdx);
+    console.log(month);
+    console.log(
+      rollingData[dataIdx].slice(monthCutoff[month - 1], monthCutoff[month])
+    );
+  }, [dataIdx, month, monthCutoff]);
+
   return (
     <>
       <Navbar setData={setDataIdx} />
@@ -56,28 +76,11 @@ function Visualization() {
         <h3 className="font-primary item-year">2023</h3>
         <h3 className="font-primary item-month">{monthValues[month]}</h3>
         <div className="item-dial">
-          <div className="lens-buttons">
-            {lenses.map((lens) => (
-              <button
-                key={lens}
-                style={{ color: lens === lens ? "white" : "black" }}
-                onClick={() => setLens(lens)}
-              >
-                {lens}
-              </button>
-            ))}
-          </div>
-          <div className="legend">
-            <p>less {lens}</p>
-            <div
-              style={{ background: `linear-gradient(90deg, ${colors})` }}
-            ></div>
-            <p>more {lens}</p>
-          </div>
           <Dial
             data={monthlyData[dataIdx]}
             changeMonth={handleMonth}
             lens={lens}
+            setLens={setLens}
           />
         </div>
         <div className="item-most">
@@ -119,7 +122,16 @@ function Visualization() {
           </div>
         </div>
       </div>
-      <VisLineGraph data={rollingData[dataIdx]} />
+      <VisLineGraph
+        data={
+          month === 0
+            ? rollingData[dataIdx]
+            : rollingData[dataIdx].slice(
+                monthCutoff[month - 1],
+                monthCutoff[month]
+              )
+        }
+      />
     </>
   );
 }
