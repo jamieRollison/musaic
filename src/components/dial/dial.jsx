@@ -106,6 +106,19 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
     [data]
   );
 
+  const minMax = useMemo(() => {
+    const minMaxObj = {};
+    lenses.forEach((lens) => {
+      const values = data.map((item) => item[lens]);
+      minMaxObj[lens] = {
+        min: Math.min(...values),
+        max: Math.max(...values),
+      };
+    });
+    console.log(minMaxObj);
+    return minMaxObj;
+  }, [data, lenses]);
+
   const getMoods = useCallback(
     () =>
       month !== 0
@@ -130,8 +143,14 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
       // }
       // const colors = Object.values(moodMap)
       // const moods = Object.keys(moodMap)
-      const colorScale = d3.scaleQuantize().domain([0, 1]).range(colors);
-      const tempoColorScale = d3.scaleQuantize().domain([0, 200]).range(colors);
+      const colorScale = d3
+        .scaleQuantize()
+        .domain([minMax[lens]["min"], minMax[lens]["max"]])
+        .range(colors);
+      const tempoColorScale = d3
+        .scaleQuantize()
+        .domain([minMax["tempo"]["min"], minMax["tempo"]["max"]])
+        .range(colors);
 
       // CONSTANTS GALORE
       const WIDTH = svg.attr("width");
@@ -309,7 +328,16 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         .style("fill", "black")
         .style("font-size", MOODS_FONT_SIZE);
     },
-    [data, month, monthMap, reverseMonthMap, getMoods, changeMonth, months]
+    [
+      data,
+      month,
+      monthMap,
+      reverseMonthMap,
+      getMoods,
+      changeMonth,
+      minMax,
+      months,
+    ]
   );
 
   // ].reduce((acc, m) => {

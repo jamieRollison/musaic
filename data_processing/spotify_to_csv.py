@@ -75,7 +75,7 @@ for index, row in data_pd.iterrows():
     if filtered_df.empty:
         print("No song features found for ", row["master_metadata_track_name"])
         continue
-    
+
     song_info = filtered_df.iloc[0]
 
     # add the audio features to the dataframe
@@ -92,7 +92,7 @@ data_pd1 = data_pd.dropna()
 sorted_df = data_pd1.sort_values(by=["month", "day"])
 
 # write the dataframe to final_data.json
-sorted_df.to_json('final_data2.json', orient = 'split', compression = 'infer', index = 'true')
+sorted_df.to_json("final_data2.json", orient="split", compression="infer", index="true")
 
 
 ####################

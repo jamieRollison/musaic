@@ -50,7 +50,7 @@ body {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: bold;
-  font-size: 0.65em;
+  font-size: 0.65rem;
   line-height: 2.5em;
   letter-spacing: 0.08em;
   color: #000000;
@@ -60,8 +60,8 @@ body {
   font-family: "Baskerville";
   font-style: normal;
   font-weight: 600;
-  font-size: 1.2em;
-  line-height: 2em;
+  font-size: 1.2rem;
+  line-height: 2rem;
   color: #000000;
 }
 
@@ -73,7 +73,7 @@ body {
   border: black;
   /* height: min-content; */
   align-items: center;
-  padding: 0.15em 0.5em;
+  padding: 0.15rem 0.5rem;
   background-color: #1ed760;
   filter: drop-shadow(0px 0.25em 0.25em rgba(0, 0, 0, 0.25));
   border-radius: 2em;
