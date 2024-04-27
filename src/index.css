@@ -196,6 +196,7 @@ body {
 
 .item-most .image-row p {
   line-height: 180%;
+  letter-spacing: 0.001em;
 }
 
 .item-most .image-row .sample {

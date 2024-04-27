@@ -12,7 +12,7 @@ export default function Representatives({ lens, dataIdx, month }) {
         {top_songs[dataIdx][month][lens].map((item, i) => {
           const id = item["spotify_track_uri"];
           return (
-            <div key={i} className="image-container">
+            <div key={i} className="image-container space-x-2">
               <img src={art_map[id]} alt={"album art"} className="album" />
               <p className="font-primary h-full" style={{ fontSize: ".9rem" }}>
                 {item["master_metadata_track_name"]}
