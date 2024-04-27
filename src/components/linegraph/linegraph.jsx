@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function VisLineGraph({ data, setMonth }) {
+export default function VisLineGraph({ data, month, setMonth }) {
   const monthNames = [
     "January",
     "February",
@@ -143,8 +143,10 @@ export default function VisLineGraph({ data, setMonth }) {
           })}
         </div>
       </div>
-      <div className="linegraph">
-        <h1 className="font-secondary">{`Song Audio Features Over Time`}</h1>
+      <div className="linegraph my-3">
+        <h1 className="font-bold">{`Song Audio Features Over Time in ${
+          month === 0 ? "" : monthNames[month - 1]
+        } 2023`}</h1>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
@@ -217,5 +219,6 @@ export default function VisLineGraph({ data, setMonth }) {
 
 VisLineGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
+  month: PropTypes.number.isRequired,
   setMonth: PropTypes.func.isRequired,
 };

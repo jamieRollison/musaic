@@ -100,6 +100,7 @@ function Visualization() {
                   monthCutoff[month]
                 )
           }
+          month={month}
           setMonth={handleMonth}
         />
       </div>
