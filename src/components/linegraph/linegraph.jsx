@@ -81,7 +81,7 @@ export default function VisLineGraph({ data, setMonth }) {
             return (
               <div
                 key={idx}
-                className="font-primary font-md flex flex-row text-center space-x-2"
+                className="font-primary text- flex flex-row text-center space-x-2"
               >
                 <input
                   type="checkbox"
@@ -103,7 +103,7 @@ export default function VisLineGraph({ data, setMonth }) {
                   }}
                 />
                 <label
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between text-lg"
                   htmlFor={feature}
                 >
                   {feature_name_map[feature]}
@@ -127,12 +127,12 @@ export default function VisLineGraph({ data, setMonth }) {
             </button>
           </div>
         </div>
-        <div className="flex justify-between items-center w-4/5">
+        <div className="flex justify-between items-center w-4/5 space-x-2 mt-1">
           {["Full Year", ...monthNames].map((month, idx) => {
             return (
               <button
                 key={idx}
-                className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+                className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl text-nowrap"
                 onClick={() => {
                   setMonth(idx);
                 }}
