@@ -38,14 +38,17 @@ import { colors } from "../../routes/Visualization/data/offline";
 // }
 
 function Dial({ data, month, changeMonth, lens, setLens }) {
-  const lenses = [
-    "valence",
-    "energy",
-    "danceability",
-    "acousticness",
-    "tempo",
-    "speechiness",
-  ];
+  const lenses = useMemo(
+    () => [
+      "valence",
+      "energy",
+      "danceability",
+      "acousticness",
+      "tempo",
+      "speechiness",
+    ],
+    []
+  );
   const svgRef = useRef();
   const monthMap = useMemo(() => {
     return {
@@ -132,8 +135,8 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
       d3.select(svgRef.current).selectChildren().remove();
       const svg = d3
         .select(svgRef.current)
-        .attr("width", 600)
-        .attr("height", 600);
+        .attr("width", 500)
+        .attr("height", 500);
 
       // TODO: Query and get dict of Mood -> Color
       // const moodMap = {
@@ -171,7 +174,7 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
       const LABEL_PADDING = 0.035;
       const LABEL_CORNER_RADIUS = 10;
 
-      const MOODS_LINE_PADDING = 150;
+      const MOODS_LINE_PADDING = 200;
       const MOOD_SPACER = (2 * LABEL_INNER_RADIUS - 2 * MOODS_LINE_PADDING) / 2;
       const MOODS_Y_STARTER =
         HEIGHT / 2 - LABEL_INNER_RADIUS + MOODS_LINE_PADDING;
@@ -244,7 +247,7 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         .enter()
         .append("text")
         .attr("class", "monthText")
-        .attr("x", LABEL_MONTH_CENTERLINE_LENGTH * 0.375)
+        .attr("x", LABEL_MONTH_CENTERLINE_LENGTH * 0.33)
         .attr("dy", LABEL_RADIUS_SIZE * 0.6)
         .append("textPath")
         .attr("xlink:href", (d, i) => "#monthArc_" + i)
@@ -311,7 +314,7 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         .attr(
           "y",
           (d, i) =>
-            MOODS_Y_STARTER + (i + 1) * MOOD_SPACER + MOODS_FONT_SIZE / 4
+            MOODS_Y_STARTER + (i + 1.5) * MOOD_SPACER + MOODS_FONT_SIZE / 4
         )
         .text((d) => d)
         .style("fill", "black")

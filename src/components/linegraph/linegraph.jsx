@@ -73,7 +73,7 @@ export default function VisLineGraph({ data, setMonth }) {
   };
 
   return (
-    <div className="div-lgraph">
+    <div className="div-lgraph mt-10">
       <h3 className="text-2xl font-bold">Select Track Audio Features</h3>
       <div>
         <div className="flex justify-between items-center">

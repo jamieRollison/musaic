@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 export default function Representatives({ lens, dataIdx, month }) {
   return (
-    <div className="item-most">
+    <div className="item-most min-h-[80vh] max-h-[80vh]">
       <h3>Songs with highest {lens}</h3>
       <div className="image-row">
         {top_songs[dataIdx][month][lens].map((item, i) => {
@@ -14,10 +14,10 @@ export default function Representatives({ lens, dataIdx, month }) {
           return (
             <div key={i} className="image-container">
               <img src={art_map[id]} alt={"album art"} className="album" />
-              <p className="font-primary h-full" style={{ fontSize: "1.3rem" }}>
+              <p className="font-primary h-full" style={{ fontSize: ".9rem" }}>
                 {item["master_metadata_track_name"]}
               </p>
-              <p className="font-primary" style={{ fontSize: "1rem" }}>
+              <p className="font-primary" style={{ fontSize: ".9rem" }}>
                 {" "}
                 {`${lens}: ${item[lens].toPrecision(3)}`}
               </p>
@@ -32,10 +32,10 @@ export default function Representatives({ lens, dataIdx, month }) {
           return (
             <div key={i} className="image-container">
               <img src={art_map[id]} alt={"album art"} className="album" />
-              <p className="font-primary" style={{ fontSize: "1.3rem" }}>
+              <p className="font-primary" style={{ fontSize: ".9rem" }}>
                 {item["master_metadata_track_name"]}
               </p>
-              <p className="font-primary" style={{ fontSize: "1rem" }}>
+              <p className="font-primary" style={{ fontSize: ".9rem" }}>
                 {" "}
                 {`${lens}: ${item[lens].toPrecision(3)}`}
               </p>
