@@ -232,12 +232,22 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         .attr("id", (d, i) => "monthArc_" + i) // unique id for each slice
         .attr("d", arc)
         .attr("transform", `translate(${WIDTH / 2}, ${HEIGHT / 2})`)
+        .on("click", (event, d) => {
+          const mo = d.data
+          console.log(mo)
+          if (monthMap[mo] !== month) {
+            changeMonth(monthMap[mo]);
+          } else {
+            changeMonth(0);
+          }
+        })
         .style("fill", (d, i) =>
           lens === "tempo"
             ? tempoColorScale(data[i][lens])
             : colorScale(data[i][lens])
         )
-        .style("stroke", (d, i) => (i === month - 1 ? "black" : "none"));
+        .style("stroke", (d, i) => (i === month - 1 ? "black" : "none"))
+        .style("cursor", "pointer");
 
       // Append the month names to each slice
       svg
@@ -256,51 +266,10 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         .on("click", (event, d) => {
           if (monthMap[d] !== month) {
             changeMonth(monthMap[d]);
-            // Remove the current month text
-            svg.select("#moods").selectAll(".currentMonthText").remove();
-            svg.select("#moods").selectAll(".moodsText").remove();
           } else {
             changeMonth(0);
-            // Remove the current month text
-            svg.select("#moods").selectAll(".currentMonthText").remove();
-            svg.select("#moods").selectAll(".moodsText").remove();
           }
-
-          // // Top Moods list for that month
-          // svg.select("#moods").selectAll(".moodsText")
-          //   .data(moods)
-          //   .enter().append("text")
-          //     .attr("class", "moodsText")
-          //     .attr('x', (WIDTH/2))
-          //     .attr('y',
-          //       (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-          //     .text(d => d)
-          //     .style('fill', 'black');
-
-          //     svg.select("#moods").selectAll(".moodsText")
-          // .data(['a','b','c'])
-          // .enter().append("text")
-          //   .attr("class", "moodsText")
-          //   .attr('x', (WIDTH/2))
-          //   .attr('y',
-          //     (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-          //   .text(d => d)
-          //   .style('fill', 'black')
-          //   .style('font-size', MOODS_FONT_SIZE);
         });
-
-      // Top Moods list for that month
-      // const moods = ['Mysterious', 'Joyful']
-      // svg.select("#moods").selectAll(".moodsText")
-      //   .data()
-      //   .enter().append("text")
-      //     .attr("class", "moodsText")
-      //     .attr('x', (WIDTH/2))
-      //     .attr('y',
-      //       (d, i) => MOODS_Y_STARTER + (i+1)*MOOD_SPACER + MOODS_FONT_SIZE/4)
-      //     .text(d => d)
-      //     .style('fill', d => moodMap[d])
-      //     .style('font-size', MOODS_FONT_SIZE)
 
       // Top Moods list for that month
       svg
