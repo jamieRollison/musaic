@@ -352,9 +352,10 @@ function Dial({ data, month, changeMonth, lens, setLens }) {
         ))}
       </div>
       <div className="legend">
-        <p>less {lens}</p>
-        <div style={{ background: `linear-gradient(90deg, ${colors})` }}></div>
-        <p>more {lens}</p>
+        <div className="elem"><span>less {lens}</span></div>
+        <div className="grad"
+          style={{ background: `linear-gradient(90deg, ${colors})` }}></div>
+        <div className="elem"><span>more {lens}</span></div>
       </div>
       <svg ref={svgRef}></svg>
     </>

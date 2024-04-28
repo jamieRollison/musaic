@@ -311,21 +311,30 @@ body {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.4em;
+  font-size: 0.75em;
   line-height: 2em;
   letter-spacing: 0.06em;
   color: #000000;
   display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 28vw;
 }
-
-.legend div {
+.legend .elem {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+} 
+/* For centering the damn gradient bar, annoyed me too much */
+.legend .elem:first-child > span { margin-right: auto; }
+.legend .elem:last-child > span { margin-left: auto; }
+.legend .grad {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  min-width: 100px;
-  align-self: center;
-  height: 10px;
-  margin: 0.5em;
+  justify-self: center;
+  height: 1em;
+  min-width: 200px;
 }
 
 .div-lgraph {
