@@ -52,16 +52,16 @@ export default function MoodStringGenerator(monthProps) {
   }
 
   const found_features = intersect_keys(monthProps, tertiles);
-  const total = found_features.length;
-  return found_features.reduce((rv, feature, idx) => {
+  // const total = found_features.length;
+  return found_features.reduce((rv, feature) => {
     const [thres1, thres2] = tertiles[feature];
     const monthVal = monthProps[feature];
     if (monthVal < thres1) {
-      return rv + tertile_labels[feature].lo + (idx !== total - 1 ? ", " : "");
+      return [...rv, tertile_labels[feature].lo];
     } else if (thres1 <= monthVal && monthVal < thres2) {
-      return rv + tertile_labels[feature].me + (idx !== total - 1 ? ", " : "");
+      return [...rv, tertile_labels[feature].me];
     } else {
-      return rv + tertile_labels[feature].hi + (idx !== total - 1 ? ", " : "");
+      return [...rv, tertile_labels[feature].hi];
     }
-  }, "");
+  }, []);
 }

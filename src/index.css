@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 *,
 *::before,
 *::after {
@@ -24,7 +27,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: white;
-  font-size: min(max(12px, 5vh), 32px);
+  font-size: min(max(12px, 5vh), 24px);
 }
 
 .div-center {
@@ -47,7 +50,7 @@ body {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: bold;
-  font-size: 0.65em;
+  font-size: 0.65rem;
   line-height: 2.5em;
   letter-spacing: 0.08em;
   color: #000000;
@@ -57,8 +60,8 @@ body {
   font-family: "Baskerville";
   font-style: normal;
   font-weight: 600;
-  font-size: 1.2em;
-  line-height: 2em;
+  font-size: 1.2rem;
+  line-height: 2rem;
   color: #000000;
 }
 
@@ -70,7 +73,7 @@ body {
   border: black;
   /* height: min-content; */
   align-items: center;
-  padding: 0.15em 0.5em;
+  padding: 0.15rem 0.5rem;
   background-color: #1ed760;
   filter: drop-shadow(0px 0.25em 0.25em rgba(0, 0, 0, 0.25));
   border-radius: 2em;
@@ -122,12 +125,15 @@ body {
 /* Visualization area grid */
 .vis-grid {
   display: grid;
-  grid-template-rows: 2.2em max-content;
+  grid-template-rows: 1em max-content max-content max-content;
   grid-template-columns: 4fr 3fr;
   grid-template-areas:
     "year month"
-    "dial most";
+    "dial most"
+    "viewchange most"
+    "lgraph lgraph";
   margin: 1vh 1vw;
+  row-gap: 0.75em;
 }
 
 .item-year {
@@ -157,15 +163,15 @@ body {
 }
 
 .item-most {
-  margin-top: 1em;
-  margin-right: 1em;
+  margin: 1em 1em 1em 0em;
   display: flex;
   grid-area: most;
   flex-direction: column;
-  justify-content: baseline;
   gap: 0.5em;
   padding: 0.5em 0em;
   height: auto;
+  max-height: 8000px;
+  min-height: 650px;
 }
 
 .item-most h3 {
@@ -186,6 +192,11 @@ body {
   display: flex;
   flex-direction: row;
   margin: 0.6em 0px;
+}
+
+.item-most .image-row p {
+  line-height: 180%;
+  letter-spacing: 0.001em;
 }
 
 .item-most .image-row .sample {
@@ -270,12 +281,12 @@ body {
   padding: 0.5em;
   border: none;
   border-radius: 1em;
-  background-color: #1ed760;
+  background-color: #55c667ff;
   color: black;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.5em;
+  font-size: 0.55em;
   line-height: 2em;
   letter-spacing: 0.06em;
   cursor: pointer;
@@ -319,15 +330,14 @@ body {
 
 .div-lgraph {
   width: 100%;
-  /* height: 75vh; */
-  height: auto;
-  display: flex;
-  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 100px;
   padding: 0px 100px;
+  grid-row-start: lgraph-start;
+  grid-row-end: lgraph-end;
+  grid-column-start: lgraph-end;
+  grid-column-end: lgraph-start;
 }
 
 .linegraph {
@@ -362,4 +372,11 @@ body {
 
 .data-select {
   border-radius: 2em;
+}
+.item-viewswitcher {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  grid-area: viewchange;
+  grid-column-end: lgraph-start;
 }

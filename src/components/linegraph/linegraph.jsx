@@ -13,71 +13,143 @@ import {
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function VisLineGraph({ data }) {
+export default function VisLineGraph({ data, month, setMonth }) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const formatMonth = (date) => {
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const [month, day] = date.split("-");
-    return `${monthNames[parseInt(month) - 1]} ${day}`;
+    return date
+      .split(":")
+      .map((d) => {
+        const [month, day] = d.split("-");
+        return `${monthNames[parseInt(month) - 1]} ${day}`;
+      })
+      .join(" to ");
   };
 
   const features = [
-    "valence_avg",
-    "danceability_avg",
-    "energy_avg",
-    "acousticness_avg",
-    "tempo_avg",
-    "speechiness_avg",
+    "valence",
+    "danceability",
+    "energy",
+    "acousticness",
+    "tempo",
+    "speechiness",
   ];
   const [active_features, setFeatures] = useState(features);
   const feature_name_map = {
-    valence_avg: "Valence",
-    danceability_avg: "Danceability",
-    energy_avg: "Energy",
-    acousticness_avg: "Acousticness",
-    tempo_avg: "Tempo",
-    speechiness_avg: "Speechiness",
+    valence: "Valence",
+    danceability: "Danceability",
+    energy: "Energy",
+    acousticness: "Acousticness",
+    tempo: "Tempo",
+    speechiness: "Speechiness",
   };
   const feature_color_map = {
-    valence_avg: "#55c667ff",
-    danceability_avg: "#39568cff",
-    energy_avg: "#287d8eff",
-    acousticness_avg: "#b8de29ff",
-    tempo_avg: "#481567ff",
-    speechiness_avg: "#fde725ff",
+    valence: "#55c667ff",
+    danceability: "#39568cff",
+    energy: "#287d8eff",
+    acousticness: "#b8de29ff",
+    tempo: "#481567ff",
+    speechiness: "#fde725ff",
   };
   const feature_yaxis_map = {
-    valence_avg: "left",
-    danceability_avg: "left",
-    energy_avg: "left",
-    acousticness_avg: "left",
-    tempo_avg: "right",
-    speechiness_avg: "left",
+    valence: "left",
+    danceability: "left",
+    energy: "left",
+    acousticness: "left",
+    tempo: "right",
+    speechiness: "left",
   };
-  const transformedData = Object.entries(data).map(([date, attributes]) => ({
-    date, // x-axis
-    ...attributes, // y-axis attributes
-  }));
 
   return (
-    <div className="div-lgraph">
-      <div className="linegraph">
-        <h1 className="font-secondary">{`Song Audio Features Over Time`}</h1>
+    <div className="div-lgraph mt-10">
+      <h3 className="text-2xl font-bold">Select Track Audio Features</h3>
+      <div>
+        <div className="flex justify-between items-center">
+          {features.map((feature, idx) => {
+            return (
+              <div
+                key={idx}
+                className="font-primary text- flex flex-row text-center space-x-2"
+              >
+                <input
+                  type="checkbox"
+                  id={feature}
+                  name={feature}
+                  checked={active_features.includes(feature)}
+                  className={`appearance-none h-5 self-center w-5 border border-black rounded-md checked:border-transparent checked:text-black checked:font-bold checked:font-primary`}
+                  style={
+                    active_features.includes(feature)
+                      ? { backgroundColor: feature_color_map[feature] }
+                      : { border: `2px solid ${feature_color_map[feature]}` }
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFeatures([...active_features, feature]);
+                    } else {
+                      setFeatures(active_features.filter((g) => g !== feature));
+                    }
+                  }}
+                />
+                <label
+                  className="flex items-center justify-between text-lg"
+                  htmlFor={feature}
+                >
+                  {feature_name_map[feature]}
+                  {/* <div className={` h-5 w-5 border border-black mx-1`} /> */}
+                </label>
+              </div>
+            );
+          })}
+          <div className="space-x-3">
+            <button
+              className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+              onClick={() => setFeatures(features)}
+            >
+              Select All
+            </button>
+            <button
+              className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl"
+              onClick={() => setFeatures([])}
+            >
+              Deselect All
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-between items-center w-4/5 space-x-2 mt-1">
+          {["Full Year", ...monthNames].map((month, idx) => {
+            return (
+              <button
+                key={idx}
+                className="border-2 border-black rounded-md hover:bg-gray-200 p-1 text-xl text-nowrap"
+                onClick={() => {
+                  setMonth(idx);
+                }}
+              >
+                {month}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="linegraph my-3">
+        <h1 className="font-bold">{`Song Audio Features Over Time in ${
+          month === 0 ? "" : monthNames[month - 1]
+        } 2023`}</h1>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={transformedData}
+            data={data}
             margin={{ top: 0, right: 50, left: 50, bottom: 40 }}
           >
             {/* <Legend style={{ marginTop: 50 }} wrapperStyle={{paddingTop: 20}}/> */}
@@ -108,6 +180,9 @@ export default function VisLineGraph({ data }) {
               interval={28}
               dataKey="date"
               className="linegraph-tick-labels"
+              tickFormatter={(date) => {
+                return date.split(":")[0];
+              }}
             >
               <Label
                 value="Date"
@@ -131,56 +206,19 @@ export default function VisLineGraph({ data }) {
                   dataKey={feature}
                   stroke={feature_color_map[feature]}
                   strokeWidth={2.5}
-                  activeDot={{ r: 6 }}
+                  dot={false}
                 />
               );
             })}
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div>
-        <h3 className="text-xl font-bold">Select Track Audio Features</h3>
-        {features.map((feature, idx) => {
-          return (
-            <div key={idx} style={{ marginBottom: "10px" }}>
-              <input
-                type="checkbox"
-                id={feature}
-                name={feature}
-                checked={active_features.includes(feature)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setFeatures([...active_features, feature]);
-                  } else {
-                    setFeatures(active_features.filter((g) => g !== feature));
-                  }
-                }}
-              />
-              <label htmlFor={feature} style={{ marginLeft: "5px" }}>
-                {feature_name_map[feature]}
-              </label>
-            </div>
-          );
-        })}
-        <div className="space-x-3">
-          <button
-            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-            onClick={() => setFeatures(features)}
-          >
-            Select All
-          </button>
-          <button
-            className="border-2 border-black rounded-md hover:background-gray-200 p-1"
-            onClick={() => setFeatures([])}
-          >
-            Deselect All
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
 
 VisLineGraph.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.arrayOf(PropTypes.object),
+  month: PropTypes.number.isRequired,
+  setMonth: PropTypes.func.isRequired,
 };
