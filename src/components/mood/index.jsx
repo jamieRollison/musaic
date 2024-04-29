@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import MoodStringGenerator from "../../util/moodgen";
 import { Tooltip } from "react-tooltip";
 
-export default function Mood({ month, data }) {
+export default function Mood({ month, data, dataIdx}) {
   const reverseMonthMap = useMemo(() => {
     return {
       0: "Year",
@@ -96,9 +96,11 @@ export default function Mood({ month, data }) {
   }, [data]);
 
   const moodsStrings = useMemo(() => {
-    console.log([total, ...data].map((month) => MoodStringGenerator(month)));
-    return [total, ...data].map((month) => MoodStringGenerator(month));
-  }, [data, total]);
+    console.log([total, ...data].map((month) => 
+                MoodStringGenerator(month, dataIdx)));
+    return [total, ...data].map((month) => 
+                MoodStringGenerator(month, dataIdx));
+  }, [data, total, dataIdx]);
 
   return (
     <div className="item-most items-center h-fit justify-between">
@@ -132,4 +134,5 @@ export default function Mood({ month, data }) {
 Mood.propTypes = {
   month: PropTypes.number.isRequired,
   data: PropTypes.array.isRequired,
+  dataIdx: PropTypes.number.isRequired,
 };
