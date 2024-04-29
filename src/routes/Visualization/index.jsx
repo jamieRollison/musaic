@@ -89,7 +89,7 @@ function Visualization() {
             bottom_songs={bottom_songs}
           />
         ) : (
-          <Mood month={month} data={monthlyData[dataIdx]} />
+          <Mood month={month} data={monthlyData[dataIdx]} dataIdx={dataIdx}/>
         )}
         <VisLineGraph
           data={

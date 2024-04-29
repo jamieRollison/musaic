@@ -1,14 +1,9 @@
-export default function MoodStringGenerator(monthProps) {
-  const tertiles = {
-    valence: [0.329, 0.606],
-    energy: [0.551, 0.8],
-    danceability: [0.5026666666666569, 0.655],
-    acousticness: [0.0451, 0.429],
-    tempo: [106.64166666666662, 132.67499999999995],
-    // 'speechiness': [0.0394, 0.067],
-    // 'mode': [0.0, 1.0],
-  };
+import tertileData from "../../mood_labeling/tertiles.json"
+// import PropTypes from "prop-types";
 
+export default function MoodStringGenerator(monthProps, dataIdx) {
+  dataIdx = 2; // 2 for the super_set, 0 = jamie, 1 = melanie
+  const tertiles = tertileData[dataIdx];
   const tertile_labels = {
     valence: {
       lo: "Sad",
@@ -35,15 +30,6 @@ export default function MoodStringGenerator(monthProps) {
       me: "Groovy",
       hi: "Upbeat",
     },
-    // 'speechiness': {
-    //   'lo': 'Instrumental',
-    //   'me': 'Vocal',
-    //   'hi': 'Talkative',
-    // },
-    // 'mode': {
-    //   'lo': ,
-    //   'hi': ,
-    // }
   };
   function intersect_keys(o1, o2) {
     const [k1, k2] = [Object.keys(o1), Object.keys(o2)];
@@ -65,3 +51,8 @@ export default function MoodStringGenerator(monthProps) {
     }
   }, []);
 }
+
+// MoodStringGenerator.propTypes = {
+//   monthProps: PropTypes.object.isRequired,
+//   dataIdx: PropTypes.number.isRequired,
+// };
