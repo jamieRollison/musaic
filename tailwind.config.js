@@ -13,6 +13,10 @@ export default {
         speechiness: "#fde725ff",
       },
     },
+    fontFamily: {
+      default: ["Plus Jakarta Sans", "sans-serif"],
+      other: ["Baskerville", "serif"],
+    },
   },
   plugins: [],
 };
