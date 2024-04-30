@@ -1,21 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from 'react-router-dom'
-import Root from './routes/root'
-import TempLoading from './routes/temp/temp-loading'
-import Visualization from './routes/Visualization'
-import './index.css'
-import Login from './routes/Login'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Root from "./routes/root";
+import Visualization from "./routes/Visualization";
+import "./index.css";
 // import Visualization from './routes/Visualization'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/visualization"/>
+    element: <Root />,
   },
   // {
   //   path: "login",
@@ -27,13 +21,13 @@ const router = createBrowserRouter([
   // },
   {
     path: "/visualization",
-    element: <Visualization />
-  }
-])
+    element: <Visualization />,
+  },
+]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/* <App /> */}
-    <RouterProvider router={router}/>
-  </React.StrictMode>,
-)
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);

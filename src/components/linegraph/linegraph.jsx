@@ -207,6 +207,7 @@ export default function VisLineGraph({ data, month, setMonth }) {
                   stroke={feature_color_map[feature]}
                   strokeWidth={2.5}
                   dot={false}
+                  animationEasing="ease-in-out"
                 />
               );
             })}
